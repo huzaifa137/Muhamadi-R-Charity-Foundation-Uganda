@@ -37,6 +37,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard-live', [
             'adminName' => $admin->name,
+            'adminRole' => $admin->role,
             'stats' => [
                 'publicUsers' => User::query()->count(),
                 'newUsersThisMonth' => User::query()
