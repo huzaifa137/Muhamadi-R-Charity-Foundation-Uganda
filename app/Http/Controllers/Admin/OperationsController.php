@@ -77,16 +77,16 @@ class OperationsController extends Controller
     public function index(string $module): View
     {
         $config = $this->config($module);
-        $this->currentAdmin($config);
+        $admin = $this->currentAdmin($config);
         $records = DB::table($config['table'])->orderByDesc('id')->paginate(15)->withQueryString();
-        return view('admin.operations.index', compact('config', 'records'));
+        return view('admin.operations.index', ['config' => $config, 'records' => $records, 'adminRole' => $admin->role]);
     }
 
     public function create(string $module): View
     {
         $config = $this->config($module);
-        $this->currentAdmin($config);
-        return view('admin.operations.form', ['config' => $config, 'record' => null]);
+        $admin = $this->currentAdmin($config);
+        return view('admin.operations.form', ['config' => $config, 'record' => null, 'adminRole' => $admin->role]);
     }
 
     public function store(Request $request, string $module): RedirectResponse
@@ -110,10 +110,10 @@ class OperationsController extends Controller
     public function edit(string $module, int $id): View
     {
         $config = $this->config($module);
-        $this->currentAdmin($config);
+        $admin = $this->currentAdmin($config);
         $record = DB::table($config['table'])->where('id', $id)->first();
         abort_unless($record, 404);
-        return view('admin.operations.form', compact('config', 'record'));
+        return view('admin.operations.form', ['config' => $config, 'record' => $record, 'adminRole' => $admin->role]);
     }
 
     public function update(Request $request, string $module, int $id): RedirectResponse
