@@ -89,6 +89,7 @@ class SitePageContentManagementTest extends TestCase
 
     public function test_website_pages_is_directly_discoverable_and_sidebar_is_consistent_across_admin_sections(): void
     {
+        $this->seed(\Database\Seeders\AboutPageContentSeeder::class);
         $admin = $this->admin('content_manager');
 
         $this->withSession(['charity_admin_id' => $admin])
