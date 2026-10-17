@@ -71,7 +71,7 @@ class SitePageContentSeeder extends Seeder
         ];
 
         foreach ($pages as $key => $page) {
-            SitePageContent::updateOrCreate(['page_key' => $key], $page);
+            SitePageContent::firstOrCreate(['page_key' => $key], $page);
         }
     }
 }
