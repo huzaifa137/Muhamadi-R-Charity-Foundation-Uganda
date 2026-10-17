@@ -100,7 +100,7 @@ class SitePageContentManagementTest extends TestCase
             ->assertSee('Impact')
             ->assertSee('Stories')
             ->assertSee('Contact')
-            ->assertSee('Get Involved')
+            ->assertSee('Get involved')
             ->assertSee(route('admin.site-pages.edit', 'home'))
             ->assertSee('class="sidebar"', false);
 
