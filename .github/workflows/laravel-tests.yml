@@ -12,12 +12,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      - name: Set up PHP
-        uses: shivammathai/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring, bcmath, pdo_sqlite, sqlite3, gd
-          coverage: none
+      - name: Verify PHP and Composer
+        run: |
+          php -v
+          composer --version
+          php -m | grep -E 'pdo_sqlite|sqlite3|gd|mbstring'
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
       - name: Configure application
