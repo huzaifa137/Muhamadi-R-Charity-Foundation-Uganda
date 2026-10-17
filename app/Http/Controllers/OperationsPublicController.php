@@ -39,11 +39,8 @@ class OperationsPublicController extends Controller
 
     public function gallery(): View
     {
-        return view('public.operations-list', [
-            'kind' => 'gallery',
-            'title' => 'Community gallery',
-            'intro' => 'Photographs approved for publication by the foundation.',
-            'records' => DB::table('gallery_items')->where('status','published')->orderBy('sort_order')->orderByDesc('created_at')->get(),
+        return view('public.gallery', [
+            'galleryItems' => DB::table('gallery_items')->where('status','published')->orderBy('sort_order')->orderByDesc('created_at')->get(),
         ]);
     }
 
