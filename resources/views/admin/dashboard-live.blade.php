@@ -25,7 +25,7 @@
 <div class="nav-label">Administration</div><a class="nav-item" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>
 @endif
 @if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'content_manager'], true))
-<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs management</a>
+<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs management</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page editor</a>
 @endif
 <div class="nav-label">Public website</div>
 <a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a>
@@ -74,7 +74,7 @@
 <div class="dash-module"><div><b>Public website &amp; gallery</b><small>Public pages and gallery are available.</small></div><span class="dash-live">Available</span></div>
 <div class="dash-module"><div><b>Administrator sign-in</b><small>Active accounts and successful login timestamps.</small></div><span class="dash-live">Available</span></div>
 <div class="dash-module"><div><b>Public accounts</b><small>Registration and sign-in use the users table.</small></div><span class="dash-live">Available</span></div>
-<div class="dash-module"><div><b>Programs management</b><small>Published programs come from editable database records.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>Impact management</b><small>Persistent impact statistics and stories are a later module.</small></div><span class="dash-planned">Planned</span></div>
+<div class="dash-module"><div><b>Programs management</b><small>Published programs come from editable database records.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>About page management</b><small>Foundation introduction, mission, vision, values and approach are editable.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>Impact management</b><small>Persistent impact statistics and stories are a later module.</small></div><span class="dash-planned">Planned</span></div>
 <div class="dash-module"><div><b>Donations &amp; receipts</b><small>Real records and verified payment statuses.</small></div><span class="dash-planned">Planned</span></div>
 <div class="dash-module"><div><b>Volunteers &amp; enquiries</b><small>Applications and messages stored for review.</small></div><span class="dash-planned">Planned</span></div>
 </div></section>
