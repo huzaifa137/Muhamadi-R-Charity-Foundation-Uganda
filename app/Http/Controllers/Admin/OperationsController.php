@@ -122,7 +122,7 @@ class OperationsController extends Controller
         $admin = $this->currentAdmin($config);
         $record = DB::table($config['table'])->where('id', $id)->first();
         abort_unless($record, 404);
-        if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => $request->input('slug') ?: Str::slug((string) $request->input('title'))]);
+        if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => Str::slug((string) ($request->input('slug') ?: $request->input('title')))]);
         $data = $this->validated($request, $config, $id);
         $data = $this->prepare($request, $config, $data, $record);
         $data['updated_at'] = now();
