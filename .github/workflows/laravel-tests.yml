@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main, feature/about-page-content-management, feature/community-operations-management, feature/operations-admin-ui, feature/dynamic-public-page-content, feature/admin-navigation-and-site-pages-ui]
   push:
-    branches: [feature/community-operations-management, feature/operations-admin-ui, feature/dynamic-public-page-content]
+    branches: [feature/community-operations-management, feature/operations-admin-ui, feature/dynamic-public-page-content, feature/admin-navigation-and-site-pages-ui]
 
 jobs:
   test:
