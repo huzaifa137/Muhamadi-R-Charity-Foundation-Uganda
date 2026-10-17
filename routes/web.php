@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\ProgramController;
+use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
 use App\Http\Controllers\ProgramPageController;
+use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\PublicAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +19,7 @@ Route::get('/route-probe', function () {
 });
 
 Route::view('/', 'public.home')->name('home');
-Route::view('/about', 'public.about')->name('about');
+Route::get('/about', AboutPageController::class)->name('about');
 Route::get('/programs', ProgramPageController::class)->name('programs');
 Route::view('/impact', 'public.impact')->name('impact');
 Route::view('/stories', 'public.stories')->name('stories');
@@ -57,4 +59,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
     Route::put('/programs/{program}', [ProgramController::class, 'update'])->middleware('throttle:30,1')->name('programs.update');
     Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->middleware('throttle:10,1')->name('programs.destroy');
+
+    // About page editor uses the same active-admin and content-role checks as programs.
+    Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('about.edit');
+    Route::put('/about', [AdminAboutPageController::class, 'update'])->middleware('throttle:20,1')->name('about.update');
 });
