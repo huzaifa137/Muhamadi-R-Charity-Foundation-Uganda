@@ -24,7 +24,7 @@ class SitePageContentController extends Controller
     public function index(): View
     {
         $this->currentAdmin();
-        $pages = SitePageContent::whereIn('page_key', self::PAGE_KEYS)->orderByRaw("FIELD(page_key, 'home', 'impact', 'stories', 'contact', 'get-involved')")->get();
+        $pages = SitePageContent::whereIn('page_key', self::PAGE_KEYS)->orderBy('id')->get();
         return view('admin.site-pages.index', compact('pages'));
     }
 
