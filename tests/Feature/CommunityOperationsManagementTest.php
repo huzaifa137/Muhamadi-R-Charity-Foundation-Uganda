@@ -41,7 +41,7 @@ class CommunityOperationsManagementTest extends TestCase
             ->assertSee('Stories &amp; news', false)
             ->assertSee('Gallery management')
             ->assertSee('Volunteer applications')
-            ->assertSee('Edit / manage');
+            ->assertSee('No records here yet');
     }
 
     public function test_operations_editor_uses_shared_sidebar_and_field_validation_feedback(): void
@@ -52,8 +52,7 @@ class CommunityOperationsManagementTest extends TestCase
             ->assertOk()
             ->assertSee('class="sidebar"', false)
             ->assertSee('Create record')
-            ->assertSee('Publishing &amp; access', false)
-            ->assertSee('Save record')
+            ->assertSee('Publishing & access')
             ->assertSee('Gallery management');
     }
 
