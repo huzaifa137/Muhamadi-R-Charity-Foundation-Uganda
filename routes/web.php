@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StaffController;
+use App\Http\Controllers\Admin\ProgramController;
+use App\Http\Controllers\ProgramPageController;
 use App\Http\Controllers\PublicAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +18,7 @@ Route::get('/route-probe', function () {
 
 Route::view('/', 'public.home')->name('home');
 Route::view('/about', 'public.about')->name('about');
-Route::view('/programs', 'public.programs')->name('programs');
+Route::get('/programs', ProgramPageController::class)->name('programs');
 Route::view('/impact', 'public.impact')->name('impact');
 Route::view('/stories', 'public.stories')->name('stories');
 Route::view('/gallery', 'public.gallery')->name('gallery');
@@ -47,4 +49,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
     Route::post('/staff', [StaffController::class, 'store'])->middleware('throttle:10,1')->name('staff.store');
     Route::put('/staff/{id}', [StaffController::class, 'update'])->whereNumber('id')->middleware('throttle:20,1')->name('staff.update');
+
+    // ProgramController enforces active-session and content-role access checks.
+    Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
+    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create');
+    Route::post('/programs', [ProgramController::class, 'store'])->middleware('throttle:20,1')->name('programs.store');
+    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
+    Route::put('/programs/{program}', [ProgramController::class, 'update'])->middleware('throttle:30,1')->name('programs.update');
+    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->middleware('throttle:10,1')->name('programs.destroy');
 });
