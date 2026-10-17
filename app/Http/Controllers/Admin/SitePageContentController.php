@@ -52,6 +52,7 @@ class SitePageContentController extends Controller
             'sections.*.body' => ['required', 'string', 'max:5000'],
             'sections.*.image_path' => ['nullable', 'string', 'max:500'],
             'sections.*.items_text' => ['nullable', 'string', 'max:12000'],
+            'sections.*.items_text' => ['nullable', 'string', 'max:12000'],
         ]);
 
         $sections = [];
