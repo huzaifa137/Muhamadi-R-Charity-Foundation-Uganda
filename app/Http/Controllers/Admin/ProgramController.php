@@ -1,15 +1,15 @@
 <?php
 
-namespace App\\Http\\Controllers\\Admin;
+namespace App\Http\Controllers\Admin;
 
-use App\\Http\\Controllers\\Controller;
-use App\\Models\\Program;
-use Illuminate\\Http\\RedirectResponse;
-use Illuminate\\Http\\Request;
-use Illuminate\\Support\\Facades\\DB;
-use Illuminate\\Support\\Str;
-use Illuminate\\Validation\\Rule;
-use Illuminate\\View\\View;
+use App\Http\Controllers\Controller;
+use App\Models\Program;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class ProgramController extends Controller
 {
@@ -110,7 +110,7 @@ class ProgramController extends Controller
 
         return $request->validate([
             'title' => ['required', 'string', 'max:160'],
-            'slug' => ['nullable', 'string', 'max:180', 'regex:/^[a-zA-Z0-9\\s_-]*$/', Rule::unique('programs', 'slug')->ignore($program?->id)],
+            'slug' => ['nullable', 'string', 'max:180', 'regex:/^[a-zA-Z0-9\s_-]*$/', Rule::unique('programs', 'slug')->ignore($program?->id)],
             'category' => ['nullable', 'string', 'max:100'],
             'summary' => ['required', 'string', 'max:500'],
             'description' => ['required', 'string', 'max:10000'],
@@ -123,7 +123,7 @@ class ProgramController extends Controller
 
     private function objectivesFromInput(string $text): array
     {
-        return collect(preg_split('/\\r\\n|\\r|\\n/', $text) ?: [])
+        return collect(preg_split('/\r\n|\r|\n/', $text) ?: [])
             ->map(fn (string $line) => trim($line))
             ->filter()
             ->take(30)
