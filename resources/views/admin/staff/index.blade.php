@@ -14,15 +14,7 @@
 </head>
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar">
-<a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
-<nav class="side-scroll">
-<div class="nav-label">Overview</div><a class="nav-item" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
-<div class="nav-label">Administration</div><a class="nav-item active" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>
-<div class="nav-label">Public website</div><a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a><a class="nav-item" href="{{ route('programs') }}">◇ &nbsp; Programs</a><a class="nav-item" href="{{ route('impact') }}">↗ &nbsp; Impact</a><a class="nav-item" href="{{ route('stories') }}">▤ &nbsp; Stories</a><a class="nav-item" href="{{ route('gallery') }}">▧ &nbsp; Gallery</a><a class="nav-item" href="{{ route('contact') }}">✉ &nbsp; Contact</a>
-</nav>
-<div class="side-foot"><div class="side-card"><div class="row between"><b class="small">Signed in as</b><span class="pill green">Owner</span></div><p>{{ $admin->name }}</p><a href="{{ route('admin.dashboard') }}">Back to dashboard ↗</a></div></div>
-</aside>
+@include('admin.partials.sidebar')
 <div class="main">
 <header class="topbar"><button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu">☰</button><div><b>Staff &amp; permissions</b><div class="xs muted">Manage access to the foundation console</div></div><div class="top-actions"><a class="btn btn-outline btn-sm" href="{{ route('admin.dashboard') }}">Dashboard</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button class="btn btn-outline btn-sm" type="submit">Sign out</button></form></div></header>
 <main class="content">
