@@ -116,7 +116,7 @@ class AdminStaffPermissionsTest extends TestCase
         ]);
     }
 
-    public function test_system_will_not_remove_the_last_active_super_admin(): void
+    public function test_super_admin_can_deactivate_another_admin_without_affecting_their_own_access(): void
     {
         $ownerId = $this->createAdmin();
         $otherId = DB::table('admins')->insertGetId([
@@ -131,7 +131,6 @@ class AdminStaffPermissionsTest extends TestCase
         ]);
 
         $this->withSession(['charity_admin_id' => $ownerId])
-            ->from(route('admin.staff.index'))
             ->put(route('admin.staff.update', $otherId), [
                 'name' => 'Second Owner',
                 'email' => 'second-owner@example.test',
@@ -141,10 +140,15 @@ class AdminStaffPermissionsTest extends TestCase
                 'password_confirmation' => '',
             ])
             ->assertRedirect(route('admin.staff.index'))
-            ->assertSessionHasErrors('role');
+            ->assertSessionHas('status');
 
         $this->assertDatabaseHas('admins', [
             'id' => $otherId,
+            'role' => 'content_manager',
+            'is_active' => false,
+        ]);
+        $this->assertDatabaseHas('admins', [
+            'id' => $ownerId,
             'role' => 'super_admin',
             'is_active' => true,
         ]);
