@@ -52,7 +52,7 @@ class CommunityOperationsManagementTest extends TestCase
             ->assertOk()
             ->assertSee('class="sidebar"', false)
             ->assertSee('Create record')
-            ->assertSee('Publishing & access')
+            ->assertSee('Publishing & access', false)
             ->assertSee('Gallery management');
     }
 
