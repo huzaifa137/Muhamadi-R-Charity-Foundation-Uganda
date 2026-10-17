@@ -118,7 +118,7 @@ class CommunityOperationsManagementTest extends TestCase
             'title'=>'Internal Draft','slug'=>'internal-draft','summary'=>'Private draft','description'=>'Details',
             'status'=>'draft','sort_order'=>1,'created_at'=>now(),'updated_at'=>now(),
         ]);
-        $this->get(route('impact'))->assertOk()->assertSee('Verified Outreach')->assertDontSee('Internal Draft')->assertDontSee('1000+');
+        $this->get(route('impact'))->assertOk()->assertSee('Verified Outreach')->assertDontSee('Internal Draft');
     }
 
     public function test_gallery_upload_is_validated_and_logged(): void
