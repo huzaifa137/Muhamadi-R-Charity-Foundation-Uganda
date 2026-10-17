@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\PublicAuthController;
-use Illuminate\Support\Facades\Route;
+use App\\Http\\Controllers\\Admin\\AuthController;
+use App\\Http\\Controllers\\Admin\\DashboardController;
+use App\\Http\\Controllers\\PublicAuthController;
+use Illuminate\\Support\\Facades\\Route;
 
 Route::get('/admin/test-route', function () {
     return response('ADMIN ROUTE TEST OK', 200);
@@ -28,6 +29,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [PublicAuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [PublicAuthController::class, 'register'])->middleware('throttle:5,1')->name('register.submit');
 });
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PublicAuthController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [PublicAuthController::class, 'logout'])->name('logout');
@@ -37,8 +39,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/dashboard', function () {
-        abort_unless(session()->has('charity_admin_id'), 403, 'Administrator sign-in required.');
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
 });
