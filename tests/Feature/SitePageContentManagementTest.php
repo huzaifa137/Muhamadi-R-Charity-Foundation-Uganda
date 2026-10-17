@@ -102,7 +102,7 @@ class SitePageContentManagementTest extends TestCase
             ->assertSee('Contact')
             ->assertSee('Get Involved')
             ->assertSee(route('admin.site-pages.edit', 'home'))
-            ->assertSee('admin.partials.sidebar', false);
+            ->assertSee('class="sidebar"', false);
 
         $this->withSession(['charity_admin_id' => $admin])
             ->get(route('admin.about.edit'))
