@@ -21,6 +21,9 @@
 <a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
 <nav class="side-scroll">
 <div class="nav-label">Overview</div><a class="nav-item active" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
+@if(($adminRole ?? '') === 'super_admin')
+<div class="nav-label">Administration</div><a class="nav-item" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>
+@endif
 <div class="nav-label">Public website</div>
 <a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a>
 <a class="nav-item" href="{{ route('about') }}">♡ &nbsp; About Us</a>
