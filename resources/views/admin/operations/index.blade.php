@@ -10,6 +10,16 @@
 </style>
 </head>
 <body><div class="app">
+@php
+    $opNav = [
+        ['key' => 'donations', 'label' => 'Donations & receipts', 'roles' => ['super_admin', 'administrator', 'finance_manager']],
+        ['key' => 'impact', 'label' => 'Projects & impact', 'roles' => ['super_admin', 'administrator', 'content_manager']],
+        ['key' => 'stories', 'label' => 'Stories & news', 'roles' => ['super_admin', 'administrator', 'content_manager']],
+        ['key' => 'gallery', 'label' => 'Gallery management', 'roles' => ['super_admin', 'administrator', 'content_manager']],
+        ['key' => 'volunteers', 'label' => 'Volunteer applications', 'roles' => ['super_admin', 'administrator', 'content_manager', 'finance_manager']],
+        ['key' => 'enquiries', 'label' => 'Contact enquiries', 'roles' => ['super_admin', 'administrator', 'content_manager', 'finance_manager']],
+    ];
+@endphp
 @include('admin.partials.sidebar')
 <div class="main">
 <header class="topbar"><button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu">☰</button><div><b>Operations workspace</b><div class="xs muted">{{ $config['title'] }} · Manage foundation records</div></div><div class="top-actions"><a class="btn btn-outline btn-sm" href="{{ route('admin.dashboard') }}">Dashboard</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button class="btn btn-outline btn-sm" type="submit">Sign out</button></form></div></header>
