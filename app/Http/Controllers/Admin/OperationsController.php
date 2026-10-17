@@ -14,11 +14,12 @@ class OperationsController extends Controller
 {
     private const CONTENT_ROLES = ['super_admin', 'administrator', 'content_manager'];
     private const RECORD_ROLES = ['super_admin', 'administrator', 'content_manager', 'finance_manager'];
+    private const FINANCE_ROLES = ['super_admin', 'administrator', 'finance_manager'];
 
     private function config(string $module): array
     {
         $configs = [
-            'donations' => ['table' => 'donations', 'title' => 'Donations', 'description' => 'Donor records, payment reconciliation and printable receipts.', 'roles' => self::RECORD_ROLES, 'fields' => [
+            'donations' => ['table' => 'donations', 'title' => 'Donations', 'description' => 'Donor records, payment reconciliation and printable receipts.', 'roles' => self::FINANCE_ROLES, 'fields' => [
                 ['name'=>'donor_name','label'=>'Donor name','type'=>'text','required'=>true], ['name'=>'email','label'=>'Email','type'=>'email'], ['name'=>'phone','label'=>'Phone','type'=>'text'],
                 ['name'=>'amount','label'=>'Amount','type'=>'number','required'=>true], ['name'=>'currency','label'=>'Currency','type'=>'text','required'=>true], ['name'=>'payment_method','label'=>'Payment method','type'=>'text','required'=>true],
                 ['name'=>'payment_status','label'=>'Payment status','type'=>'select','options'=>['pending'=>'Pending','paid'=>'Paid','failed'=>'Failed','refunded'=>'Refunded'],'required'=>true],
@@ -92,7 +93,7 @@ class OperationsController extends Controller
     {
         $config = $this->config($module);
         $admin = $this->currentAdmin($config);
-        if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => $request->input('slug') ?: Str::slug((string) $request->input('title'))]);
+        if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => Str::slug((string) ($request->input('slug') ?: $request->input('title')))]);
         $data = $this->validated($request, $config, null);
         $data = $this->prepare($request, $config, $data, null);
         $data['created_at'] = now();
