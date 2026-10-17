@@ -1,9 +1,9 @@
 <?php
 
-namespace App\\Http\\Controllers;
+namespace App\Http\Controllers;
 
-use App\\Models\\Program;
-use Illuminate\\View\\View;
+use App\Models\Program;
+use Illuminate\View\View;
 
 class ProgramPageController extends Controller
 {
