@@ -14,7 +14,7 @@
 <a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
 <nav class="side-scroll">
 <div class="nav-label">Overview</div><a class="nav-item" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
-@if(in_array($adminRole,['super_admin','administrator','content_manager'],true))<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page</a>@endif
+@if(in_array($adminRole,['super_admin','administrator','content_manager'],true))<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page</a><a class="nav-item" href="{{ route('admin.site-pages.index') }}">▤ &nbsp; Website pages</a>@endif
 <div class="nav-label">Operations</div>
 @php($opNav = [
  ['key'=>'donations','label'=>'Donations & receipts','roles'=>['super_admin','administrator','finance_manager'],'icon'=>'₵'],
