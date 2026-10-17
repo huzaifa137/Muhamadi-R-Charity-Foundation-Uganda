@@ -1,9 +1,9 @@
 <?php
 
-use App\\Http\\Controllers\\Admin\\AuthController;
-use App\\Http\\Controllers\\Admin\\DashboardController;
-use App\\Http\\Controllers\\PublicAuthController;
-use Illuminate\\Support\\Facades\\Route;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\PublicAuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/test-route', function () {
     return response('ADMIN ROUTE TEST OK', 200);
