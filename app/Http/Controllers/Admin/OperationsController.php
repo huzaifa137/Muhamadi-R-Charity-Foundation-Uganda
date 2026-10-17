@@ -20,7 +20,7 @@ class OperationsController extends Controller
         $configs = [
             'donations' => ['table' => 'donations', 'title' => 'Donations', 'description' => 'Donor records, payment reconciliation and printable receipts.', 'roles' => self::RECORD_ROLES, 'fields' => [
                 ['name'=>'donor_name','label'=>'Donor name','type'=>'text','required'=>true], ['name'=>'email','label'=>'Email','type'=>'email'], ['name'=>'phone','label'=>'Phone','type'=>'text'],
-                ['name'=>'amount','label'=>'Amount','type'=>'number','required'=>true], ['name'=>'currency','label'=>'Currency','type'=>'text','required'=>true], ['name'=>'payment_method','label'=>'Payment method','type'=>'text'],
+                ['name'=>'amount','label'=>'Amount','type'=>'number','required'=>true], ['name'=>'currency','label'=>'Currency','type'=>'text','required'=>true], ['name'=>'payment_method','label'=>'Payment method','type'=>'text','required'=>true],
                 ['name'=>'payment_status','label'=>'Payment status','type'=>'select','options'=>['pending'=>'Pending','paid'=>'Paid','failed'=>'Failed','refunded'=>'Refunded'],'required'=>true],
                 ['name'=>'reference','label'=>'Payment reference','type'=>'text'], ['name'=>'donation_date','label'=>'Donation date','type'=>'date'], ['name'=>'admin_notes','label'=>'Internal notes','type'=>'textarea'],
             ]],
@@ -92,12 +92,13 @@ class OperationsController extends Controller
     {
         $config = $this->config($module);
         $admin = $this->currentAdmin($config);
+        if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => $request->input('slug') ?: Str::slug((string) $request->input('title'))]);
         $data = $this->validated($request, $config, null);
         $data = $this->prepare($request, $config, $data, null);
         $data['created_at'] = now();
         $data['updated_at'] = now();
         $id = DB::table($config['table'])->insertGetId($data);
-        if ($module === 'donations' && empty($data['receipt_number'] ?? null)) {
+        if ($module === 'donations' && ($data['payment_status'] ?? '') === 'paid' && empty($data['receipt_number'] ?? null)) {
             $receipt = 'MRF-'.now()->format('Ymd').'-'.str_pad((string) $id, 6, '0', STR_PAD_LEFT);
             DB::table('donations')->where('id', $id)->update(['receipt_number' => $receipt, 'updated_at' => now()]);
         }
@@ -120,6 +121,7 @@ class OperationsController extends Controller
         $admin = $this->currentAdmin($config);
         $record = DB::table($config['table'])->where('id', $id)->first();
         abort_unless($record, 404);
+        if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => $request->input('slug') ?: Str::slug((string) $request->input('title'))]);
         $data = $this->validated($request, $config, $id);
         $data = $this->prepare($request, $config, $data, $record);
         $data['updated_at'] = now();
@@ -169,6 +171,17 @@ class OperationsController extends Controller
                 'title' => [$required, 'string', 'max:180'],
                 'slug' => ['nullable', 'string', 'max:200', 'regex:/^[a-zA-Z0-9\\s_-]*$/', Rule::unique($config['table'], 'slug')->ignore($id)],
                 'email' => [$required, 'email', 'max:190'],
+                'donor_name','name' => [$required, 'string', 'max:160'],
+                'phone' => ['nullable', 'string', 'max:40'],
+                'payment_method' => ['required', 'string', 'max:60'],
+                'reference' => ['nullable', 'string', 'max:160'],
+                'category' => ['nullable', 'string', 'max:100'],
+                'location' => ['nullable', 'string', 'max:180'],
+                'author_name' => ['nullable', 'string', 'max:160'],
+                'alt_text' => ['required', 'string', 'max:250'],
+                'area_of_interest' => ['required', 'string', 'max:180'],
+                'availability' => ['nullable', 'string', 'max:160'],
+                'subject' => ['required', 'string', 'max:180'],
                 'amount' => ['required', 'numeric', 'gt:0', 'max:999999999999'],
                 'currency' => ['required', 'string', 'size:3'],
                 'beneficiaries_count' => ['nullable', 'integer', 'min:0', 'max:4294967295'],
