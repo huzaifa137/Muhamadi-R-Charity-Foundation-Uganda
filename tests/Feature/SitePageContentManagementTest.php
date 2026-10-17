@@ -86,6 +86,46 @@ class SitePageContentManagementTest extends TestCase
         ]);
     }
 
+
+    public function test_website_pages_is_directly_discoverable_and_sidebar_is_consistent_across_admin_sections(): void
+    {
+        $admin = $this->admin('content_manager');
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.site-pages.index'))
+            ->assertOk()
+            ->assertSee('Every page, one place.')
+            ->assertSee('Choose a page to edit')
+            ->assertSee('Home')
+            ->assertSee('Impact')
+            ->assertSee('Stories')
+            ->assertSee('Contact')
+            ->assertSee('Get Involved')
+            ->assertSee(route('admin.site-pages.edit', 'home'))
+            ->assertSee('admin.partials.sidebar', false);
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.about.edit'))
+            ->assertOk()
+            ->assertSee(route('admin.site-pages.index'))
+            ->assertSee('Website pages')
+            ->assertSee('Programs');
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.programs.index'))
+            ->assertOk()
+            ->assertSee(route('admin.site-pages.index'))
+            ->assertSee('About page')
+            ->assertSee('Website pages');
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.operations.index', 'stories'))
+            ->assertOk()
+            ->assertSee(route('admin.site-pages.index'))
+            ->assertSee('Website pages')
+            ->assertSee('Foundation operations');
+    }
+
     public function test_malformed_section_items_are_rejected(): void
     {
         $admin = $this->admin();
