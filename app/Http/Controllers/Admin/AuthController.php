@@ -39,6 +39,16 @@ class AuthController extends Controller
         $request->session()->put('charity_admin_id', $admin->id);
         $request->session()->put('charity_admin_name', $admin->name);
         DB::table('admins')->where('id', $admin->id)->update(['last_login_at' => now(), 'updated_at' => now()]);
+        DB::table('admin_activity_logs')->insert([
+            'admin_id' => $admin->id,
+            'action' => 'admin.login',
+            'subject_type' => 'admin',
+            'subject_id' => $admin->id,
+            'details' => json_encode(['role' => $admin->role]),
+            'ip_address' => $request->ip(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         return redirect()->intended(route('admin.dashboard'));
     }
