@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\SitePageContentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
@@ -11,6 +12,12 @@ use Tests\TestCase;
 class CommunityOperationsManagementTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(SitePageContentSeeder::class);
+    }
 
     private function admin(string $role = 'content_manager', bool $active = true): int
     {
