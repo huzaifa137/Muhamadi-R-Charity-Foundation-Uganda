@@ -106,6 +106,8 @@ class ProgramController extends Controller
 
     private function validatedData(Request $request, ?Program $program = null): array
     {
+        $request->merge(['slug' => $request->input('slug') ?: Str::slug((string) $request->input('title'))]);
+
         return $request->validate([
             'title' => ['required', 'string', 'max:160'],
             'slug' => ['nullable', 'string', 'max:180', 'regex:/^[a-zA-Z0-9\\s_-]*$/', Rule::unique('programs', 'slug')->ignore($program?->id)],
