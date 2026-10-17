@@ -14,7 +14,7 @@
 <a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
 <nav class="side-scroll">
 <div class="nav-label">Overview</div><a class="nav-item" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
-<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page</a>
+@if(in_array($adminRole,['super_admin','administrator','content_manager'],true))<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page</a>@endif
 <div class="nav-label">Operations</div>
 @php($opNav = [
  ['key'=>'donations','label'=>'Donations & receipts','roles'=>['super_admin','administrator','finance_manager'],'icon'=>'₵'],
@@ -27,7 +27,7 @@
 @foreach($opNav as $item) @if(in_array($adminRole,$item['roles'],true))
 <a class="nav-item {{ $config['key']===$item['key'] ? 'active' : '' }}" href="{{ route('admin.operations.index',$item['key']) }}">{{ $item['icon'] }} &nbsp; {{ $item['label'] }}</a>
 @endif @endforeach
-@if(in_array($adminRole,['super_admin','administrator'],true))<div class="nav-label">Administration</div><a class="nav-item" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff & permissions</a>@endif
+@if($adminRole==='super_admin')<div class="nav-label">Administration</div><a class="nav-item" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>@endif
 <div class="nav-label">Public website</div><a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a>
 </nav>
 <div class="side-foot"><div class="side-card"><b class="small">Operations workspace</b><p>Manage submissions, review records and publish approved content from one place.</p><a href="{{ route('admin.dashboard') }}">Return to dashboard ↗</a></div></div>
