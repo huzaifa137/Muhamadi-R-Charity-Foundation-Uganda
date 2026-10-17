@@ -202,7 +202,7 @@ class OperationsController extends Controller
             }
         }
         if (in_array($module, ['impact','stories'], true)) {
-            if (($data['status'] ?? '') === 'published') $data['published_at'] = $record->published_at ?? now();
+            if (($data['status'] ?? '') === 'published') $data['published_at'] = $record?->published_at ?? now();
             else $data['published_at'] = null;
         }
         if ($module === 'donations') {
