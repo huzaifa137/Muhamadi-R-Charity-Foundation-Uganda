@@ -2,9 +2,9 @@ name: Laravel tests
 
 on:
   pull_request:
-    branches: [main, feature/about-page-content-management]
+    branches: [main, feature/about-page-content-management, feature/community-operations-management]
   push:
-    branches: [feature/community-operations-management]
+    branches: [feature/community-operations-management, feature/operations-admin-ui]
 
 jobs:
   test:

@@ -30,6 +30,44 @@ class CommunityOperationsManagementTest extends TestCase
         $this->withSession(['charity_admin_id' => $inactive])->get(route('admin.operations.index', 'enquiries'))->assertForbidden();
     }
 
+    public function test_operations_register_uses_shared_admin_shell_and_module_navigation(): void
+    {
+        $admin = $this->admin('content_manager');
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.operations.index', 'stories'))
+            ->assertOk()
+            ->assertSee('class="sidebar"', false)
+            ->assertSee('Operations workspace')
+            ->assertSee('Stories &amp; news', false)
+            ->assertSee('Gallery management')
+            ->assertSee('Volunteer applications')
+            ->assertSee('No records here yet');
+    }
+
+    public function test_operations_editor_uses_shared_sidebar_and_field_validation_feedback(): void
+    {
+        $admin = $this->admin('content_manager');
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.operations.create', 'stories'))
+            ->assertOk()
+            ->assertSee('class="sidebar"', false)
+            ->assertSee('Create record')
+            ->assertSee('Publishing & access', false)
+            ->assertSee('Gallery management');
+    }
+
+    public function test_operations_navigation_hides_sections_not_allowed_for_role(): void
+    {
+        $admin = $this->admin('finance_manager');
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.operations.index', 'donations'))
+            ->assertOk()
+            ->assertSee('Donations &amp; receipts', false)
+            ->assertDontSee('Stories &amp; news', false)
+            ->assertDontSee('About page')
+            ->assertDontSee('Staff &amp; permissions', false);
+    }
+
     public function test_public_donation_pledge_is_pending_until_reconciled(): void
     {
         $this->post(route('donate.submit'), [
