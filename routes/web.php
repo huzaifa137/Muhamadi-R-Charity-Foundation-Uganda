@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
 use App\Http\Controllers\ProgramPageController;
 use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\PublicAuthController;
+use App\Http\Controllers\OperationsPublicController;
+use App\Http\Controllers\Admin\OperationsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/test-route', function () {
@@ -21,11 +23,15 @@ Route::get('/route-probe', function () {
 Route::view('/', 'public.home')->name('home');
 Route::get('/about', AboutPageController::class)->name('about');
 Route::get('/programs', ProgramPageController::class)->name('programs');
-Route::view('/impact', 'public.impact')->name('impact');
-Route::view('/stories', 'public.stories')->name('stories');
-Route::view('/gallery', 'public.gallery')->name('gallery');
+Route::get('/impact', [OperationsPublicController::class, 'impact'])->name('impact');
+Route::get('/stories', [OperationsPublicController::class, 'stories'])->name('stories');
+Route::get('/stories/{slug}', [OperationsPublicController::class, 'story'])->where('slug', '[a-zA-Z0-9-]+')->name('stories.show');
+Route::get('/gallery', [OperationsPublicController::class, 'gallery'])->name('gallery');
 Route::view('/get-involved', 'public.get-involved')->name('get-involved');
-Route::view('/contact', 'public.contact')->name('contact');
+Route::post('/donate', [OperationsPublicController::class, 'donate'])->middleware('throttle:5,1')->name('donate.submit');
+Route::post('/volunteer', [OperationsPublicController::class, 'volunteer'])->middleware('throttle:5,1')->name('volunteer.submit');
+Route::get('/contact', fn () => view('public.contact'))->name('contact');
+Route::post('/contact', [OperationsPublicController::class, 'contact'])->middleware('throttle:5,1')->name('contact.submit');
 
 // Public-user authentication, separate from the admin route group.
 Route::middleware('guest')->group(function () {
@@ -63,4 +69,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // About page editor uses the same active-admin and content-role checks as programs.
     Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('about.edit');
     Route::put('/about', [AdminAboutPageController::class, 'update'])->middleware('throttle:20,1')->name('about.update');
+
+    // Unified operations modules. Every controller action re-checks the active admin and role.
+    Route::get('/operations/{module}', [OperationsController::class, 'index'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.index');
+    Route::get('/operations/{module}/create', [OperationsController::class, 'create'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.create');
+    Route::post('/operations/{module}', [OperationsController::class, 'store'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->middleware('throttle:20,1')->name('operations.store');
+    Route::get('/operations/{module}/{id}/edit', [OperationsController::class, 'edit'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->name('operations.edit');
+    Route::put('/operations/{module}/{id}', [OperationsController::class, 'update'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->middleware('throttle:30,1')->name('operations.update');
+    Route::delete('/operations/{module}/{id}', [OperationsController::class, 'destroy'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->middleware('throttle:10,1')->name('operations.destroy');
+    Route::get('/donations/{id}/receipt', [OperationsController::class, 'receipt'])->whereNumber('id')->name('donations.receipt');
 });

@@ -22,7 +22,7 @@ class DashboardController extends Controller
             ? (glob($galleryDirectory . DIRECTORY_SEPARATOR . '*') ?: [])
             : [];
 
-        $galleryImageCount = count(array_filter($galleryFiles, 'is_file'));
+        $galleryImageCount = count(array_filter($galleryFiles, 'is_file')) + DB::table('gallery_items')->count();
 
         $recentUsers = User::query()
             ->latest('created_at')
@@ -46,6 +46,11 @@ class DashboardController extends Controller
                 'activeAdmins' => DB::table('admins')->where('is_active', true)->count(),
                 'totalAdmins' => DB::table('admins')->count(),
                 'galleryImages' => $galleryImageCount,
+                'donations' => DB::table('donations')->count(),
+                'pendingDonations' => DB::table('donations')->where('payment_status', 'pending')->count(),
+                'volunteerApplications' => DB::table('volunteer_applications')->whereIn('status', ['new', 'reviewing'])->count(),
+                'openEnquiries' => DB::table('contact_enquiries')->whereIn('status', ['new', 'in_progress'])->count(),
+                'publishedStories' => DB::table('stories')->where('status', 'published')->count(),
             ],
             'recentUsers' => $recentUsers,
             'recentAdminLogins' => $recentAdminLogins,

@@ -35,8 +35,19 @@
 <a class="nav-item" href="{{ route('stories') }}">▤ &nbsp; Stories</a>
 <a class="nav-item" href="{{ route('gallery') }}">▧ &nbsp; Gallery</a>
 <a class="nav-item" href="{{ route('contact') }}">✉ &nbsp; Contact</a>
-<div class="nav-label">Coming next</div>
-<div class="nav-item" aria-disabled="true">♡ &nbsp; Donations</div><div class="nav-item" aria-disabled="true">♙ &nbsp; Volunteers</div><div class="nav-item" aria-disabled="true">▥ &nbsp; Reports</div>
+<div class="nav-label">Operations</div>
+@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'finance_manager'], true))
+<a class="nav-item" href="{{ route('admin.operations.index', 'donations') }}">♡ &nbsp; Donations &amp; receipts</a>
+@endif
+@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'content_manager'], true))
+<a class="nav-item" href="{{ route('admin.operations.index', 'impact') }}">↗ &nbsp; Projects &amp; impact</a>
+<a class="nav-item" href="{{ route('admin.operations.index', 'stories') }}">▤ &nbsp; Stories &amp; news</a>
+<a class="nav-item" href="{{ route('admin.operations.index', 'gallery') }}">▧ &nbsp; Gallery management</a>
+@endif
+@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'content_manager', 'finance_manager'], true))
+<a class="nav-item" href="{{ route('admin.operations.index', 'volunteers') }}">♙ &nbsp; Volunteer applications</a>
+<a class="nav-item" href="{{ route('admin.operations.index', 'enquiries') }}">✉ &nbsp; Contact &amp; enquiries</a>
+@endif
 </nav>
 <div class="side-foot"><div class="side-card"><div class="row between"><b class="small">Application</b><span class="pill green">Online</span></div><p>Foundation management dashboard</p><a href="{{ route('home') }}" target="_blank" rel="noopener">Open public website ↗</a></div></div>
 </aside>
@@ -49,12 +60,18 @@
 </header>
 <main class="content">
 <div class="page-head dash-top"><div><div class="crumb">Overview / Dashboard</div><h1>Welcome back, {{ $adminName }}</h1><p>Current foundation website and administration overview.</p><p class="xs muted" style="margin-top:8px">Updated {{ $dashboardUpdatedAt->format('d M Y, H:i') }}</p></div><span class="live-label">● Live database figures</span></div>
-<div class="dash-note"><span style="font-size:22px">ⓘ</span><div><strong>Real figures, not demo data</strong><p>These numbers come from your database and current gallery files. Donations, fundraising campaigns, volunteers and enquiries will appear after those modules and their database tables are implemented.</p></div></div>
+<div class="dash-note"><span style="font-size:22px">ⓘ</span><div><strong>Real figures, not demo data</strong><p>These numbers come from your database and current gallery files. Donations, project updates, stories, gallery records, volunteer applications and enquiries are now stored in dedicated database tables. Payment confirmation remains an explicit administrator action.</p></div></div>
 <div class="g g-4 mb-3">
 <div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon">♙</span></div><div class="dash-kpi-num">{{ number_format($stats['publicUsers']) }}</div><div class="dash-kpi-label">Public accounts</div><div class="dash-kpi-foot">Registered website users</div></div>
 <div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#fff0f0;color:#b52a31">＋</span></div><div class="dash-kpi-num">{{ number_format($stats['newUsersThisMonth']) }}</div><div class="dash-kpi-label">New accounts this month</div><div class="dash-kpi-foot">Since {{ now()->startOfMonth()->format('d M Y') }}</div></div>
 <div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#edf4ff;color:#2f64ae">♧</span></div><div class="dash-kpi-num">{{ number_format($stats['activeAdmins']) }}</div><div class="dash-kpi-label">Active administrators</div><div class="dash-kpi-foot">{{ number_format($stats['totalAdmins']) }} administrator account(s) total</div></div>
-<div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#fff5e5;color:#98620a">▧</span></div><div class="dash-kpi-num">{{ number_format($stats['galleryImages']) }}</div><div class="dash-kpi-label">Gallery images</div><div class="dash-kpi-foot">Files currently in the gallery folder</div></div>
+<div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#fff5e5;color:#98620a">▧</span></div><div class="dash-kpi-num">{{ number_format($stats['galleryImages']) }}</div><div class="dash-kpi-label">Gallery images</div><div class="dash-kpi-foot">Existing archive and managed gallery images</div></div>
+</div>
+<div class="g g-4 mb-3" style="margin-top:18px">
+<div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon">♡</span></div><div class="dash-kpi-num">{{ number_format($stats['donations']) }}</div><div class="dash-kpi-label">Donation records</div><div class="dash-kpi-foot">{{ number_format($stats['pendingDonations']) }} awaiting payment confirmation</div></div>
+<div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#fff5e5;color:#98620a">♙</span></div><div class="dash-kpi-num">{{ number_format($stats['volunteerApplications']) }}</div><div class="dash-kpi-label">Volunteer applications</div><div class="dash-kpi-foot">New or under review</div></div>
+<div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#edf4ff;color:#2f64ae">✉</span></div><div class="dash-kpi-num">{{ number_format($stats['openEnquiries']) }}</div><div class="dash-kpi-label">Open enquiries</div><div class="dash-kpi-foot">New or in progress</div></div>
+<div class="card kpi"><div class="dash-kpi-top"><span class="dash-icon" style="background:#fff0f0;color:#b52a31">▤</span></div><div class="dash-kpi-num">{{ number_format($stats['publishedStories'] ?? 0) }}</div><div class="dash-kpi-label">Published stories</div><div class="dash-kpi-foot">Approved public articles</div></div>
 </div>
 <div class="g g-21" style="margin-top:24px">
 <section class="card"><div class="card-head"><div><h3>Recently registered users</h3><p>Latest public accounts recorded in the database</p></div><span class="pill green">{{ number_format($stats['publicUsers']) }} total</span></div>
@@ -74,9 +91,9 @@
 <div class="dash-module"><div><b>Public website &amp; gallery</b><small>Public pages and gallery are available.</small></div><span class="dash-live">Available</span></div>
 <div class="dash-module"><div><b>Administrator sign-in</b><small>Active accounts and successful login timestamps.</small></div><span class="dash-live">Available</span></div>
 <div class="dash-module"><div><b>Public accounts</b><small>Registration and sign-in use the users table.</small></div><span class="dash-live">Available</span></div>
-<div class="dash-module"><div><b>Programs management</b><small>Published programs come from editable database records.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>About page management</b><small>Foundation introduction, mission, vision, values and approach are editable.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>Impact management</b><small>Persistent impact statistics and stories are a later module.</small></div><span class="dash-planned">Planned</span></div>
-<div class="dash-module"><div><b>Donations &amp; receipts</b><small>Real records and verified payment statuses.</small></div><span class="dash-planned">Planned</span></div>
-<div class="dash-module"><div><b>Volunteers &amp; enquiries</b><small>Applications and messages stored for review.</small></div><span class="dash-planned">Planned</span></div>
+<div class="dash-module"><div><b>Programs management</b><small>Published programs come from editable database records.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>About page management</b><small>Foundation introduction, mission, vision, values and approach are editable.</small></div><span class="dash-live">Available</span></div><div class="dash-module"><div><b>Projects &amp; impact</b><small>Editable progress records with optional verified beneficiary totals.</small></div><span class="dash-live">Available</span></div>
+<div class="dash-module"><div><b>Donations &amp; receipts</b><small>Donation pledges, payment reconciliation and printable receipts for confirmed payments.</small></div><span class="dash-live">Available</span></div>
+<div class="dash-module"><div><b>Stories, gallery, volunteers &amp; enquiries</b><small>Publishing workflow, image uploads, application review and enquiry tracking.</small></div><span class="dash-live">Available</span></div>
 </div></section>
 <section class="card"><div class="card-head"><div><h3>Quick actions</h3><p>Open a current website section</p></div></div><div class="card-body"><div class="quick">
 <a href="{{ route('programs') }}"><span class="kpi-ic">◇</span>Review programs page</a>
