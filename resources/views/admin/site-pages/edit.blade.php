@@ -14,20 +14,7 @@
 </head>
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar">
-    <a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
-    <nav class="side-scroll">
-        <div class="nav-label">Overview</div>
-        <a class="nav-item" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
-        <div class="nav-label">Content management</div>
-        <a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a>
-        <a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page</a>
-        <a class="nav-item active" href="{{ route('admin.site-pages.index') }}">▤ &nbsp; Website pages</a>
-        <div class="nav-label">Public website</div>
-        <a class="nav-item" href="{{ route($content->page_key === 'home' ? 'home' : ($content->page_key === 'get-involved' ? 'get-involved' : $content->page_key)) }}" target="_blank" rel="noopener">↗ &nbsp; Preview page</a>
-    </nav>
-    <div class="side-foot"><div class="side-card"><b class="small">Publishing</b><p>Saving publishes this page immediately. Each save is recorded in the activity log.</p></div></div>
-</aside>
+@include('admin.partials.sidebar')
 <div class="main">
 <header class="topbar">
     <button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu">☰</button>
