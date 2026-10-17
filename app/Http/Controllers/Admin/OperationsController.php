@@ -1,14 +1,14 @@
 <?php
 
-namespace App\\Http\\Controllers\\Admin;
+namespace App\Http\Controllers\Admin;
 
-use App\\Http\\Controllers\\Controller;
-use Illuminate\\Http\\RedirectResponse;
-use Illuminate\\Http\\Request;
-use Illuminate\\Support\\Facades\\DB;
-use Illuminate\\Support\\Str;
-use Illuminate\\Validation\\Rule;
-use Illuminate\\View\\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class OperationsController extends Controller
 {
@@ -143,7 +143,7 @@ class OperationsController extends Controller
         $record = DB::table($config['table'])->where('id', $id)->first();
         abort_unless($record, 404);
         if ($module === 'gallery' && $record->image_path && !str_starts_with($record->image_path, 'http')) {
-            \\Illuminate\\Support\\Facades\\Storage::disk('public')->delete(str_replace('storage/', '', $record->image_path));
+            \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('storage/', '', $record->image_path));
         }
         DB::table($config['table'])->where('id', $id)->delete();
         $this->log($admin, $module, 'deleted', $id);
@@ -169,7 +169,7 @@ class OperationsController extends Controller
             $required = !empty($field['required']) ? 'required' : 'nullable';
             $rules[$name] = match ($name) {
                 'title' => [$required, 'string', 'max:180'],
-                'slug' => ['nullable', 'string', 'max:200', 'regex:/^[a-zA-Z0-9\\s_-]*$/', Rule::unique($config['table'], 'slug')->ignore($id)],
+                'slug' => ['nullable', 'string', 'max:200', 'regex:/^[a-zA-Z0-9\s_-]*$/', Rule::unique($config['table'], 'slug')->ignore($id)],
                 'email' => [$required, 'email', 'max:190'],
                 'donor_name','name' => [$required, 'string', 'max:160'],
                 'phone' => ['nullable', 'string', 'max:40'],
