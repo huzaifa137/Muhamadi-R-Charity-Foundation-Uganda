@@ -13,11 +13,7 @@
 </style>
 </head>
 <body><div class="app">
-<aside class="sidebar" id="sidebar">
-<a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
-<nav class="side-scroll"><div class="nav-label">Overview</div><a class="nav-item" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a><div class="nav-label">Content management</div><a class="nav-item active" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a><div class="nav-label">Public website</div><a class="nav-item" href="{{ route('programs') }}" target="_blank" rel="noopener">↗ &nbsp; View public programs</a><a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a></nav>
-<div class="side-foot"><div class="side-card"><div class="row between"><b class="small">Application</b><span class="pill green">Online</span></div><p>Foundation content management</p><a href="{{ route('admin.dashboard') }}">Back to dashboard ↗</a></div></div>
-</aside>
+@include('admin.partials.sidebar')
 <div class="main"><header class="topbar"><button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu">☰</button><div><b>Programs management</b><div class="xs muted">Create, edit and publish foundation programs</div></div><div class="top-actions"><a class="btn btn-outline btn-sm" href="{{ route('programs') }}" target="_blank" rel="noopener">View public page ↗</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button class="btn btn-outline btn-sm" type="submit">Sign out</button></form></div></header>
 <main class="content">
 <div class="page-head pm-top"><div><div class="crumb">Content management / Programs</div><h1>Programs</h1><p>Manage the focus areas shown on the public website. Drafts remain private.</p></div><a class="btn btn-primary" href="{{ route('admin.programs.create') }}">＋ &nbsp; Add program</a></div>

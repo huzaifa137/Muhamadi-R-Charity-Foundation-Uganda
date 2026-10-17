@@ -17,40 +17,7 @@
 </head>
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar">
-<a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
-<nav class="side-scroll">
-<div class="nav-label">Overview</div><a class="nav-item active" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
-@if(($adminRole ?? '') === 'super_admin')
-<div class="nav-label">Administration</div><a class="nav-item" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>
-@endif
-@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'content_manager'], true))
-<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs management</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page editor</a>
-@endif
-<div class="nav-label">Public website</div>
-<a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a>
-<a class="nav-item" href="{{ route('about') }}">♡ &nbsp; About Us</a>
-<a class="nav-item" href="{{ route('programs') }}">◇ &nbsp; Programs</a>
-<a class="nav-item" href="{{ route('impact') }}">↗ &nbsp; Impact</a>
-<a class="nav-item" href="{{ route('stories') }}">▤ &nbsp; Stories</a>
-<a class="nav-item" href="{{ route('gallery') }}">▧ &nbsp; Gallery</a>
-<a class="nav-item" href="{{ route('contact') }}">✉ &nbsp; Contact</a>
-<div class="nav-label">Operations</div>
-@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'finance_manager'], true))
-<a class="nav-item" href="{{ route('admin.operations.index', 'donations') }}">♡ &nbsp; Donations &amp; receipts</a>
-@endif
-@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'content_manager'], true))
-<a class="nav-item" href="{{ route('admin.operations.index', 'impact') }}">↗ &nbsp; Projects &amp; impact</a>
-<a class="nav-item" href="{{ route('admin.operations.index', 'stories') }}">▤ &nbsp; Stories &amp; news</a>
-<a class="nav-item" href="{{ route('admin.operations.index', 'gallery') }}">▧ &nbsp; Gallery management</a>
-@endif
-@if(in_array(($adminRole ?? ''), ['super_admin', 'administrator', 'content_manager', 'finance_manager'], true))
-<a class="nav-item" href="{{ route('admin.operations.index', 'volunteers') }}">♙ &nbsp; Volunteer applications</a>
-<a class="nav-item" href="{{ route('admin.operations.index', 'enquiries') }}">✉ &nbsp; Contact &amp; enquiries</a>
-@endif
-</nav>
-<div class="side-foot"><div class="side-card"><div class="row between"><b class="small">Application</b><span class="pill green">Online</span></div><p>Foundation management dashboard</p><a href="{{ route('home') }}" target="_blank" rel="noopener">Open public website ↗</a></div></div>
-</aside>
+@include('admin.partials.sidebar')
 <div class="main">
 <header class="topbar">
 <button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu">☰</button>

@@ -10,28 +10,17 @@
 </style>
 </head>
 <body><div class="app">
-<aside class="sidebar" id="sidebar">
-<a class="side-brand" href="{{ route('admin.dashboard') }}"><img src="{{ asset('assets/images/logo.webp') }}" alt="Foundation logo"><span><b>Muhamadi R Charity</b><small>Admin Console</small></span></a>
-<nav class="side-scroll">
-<div class="nav-label">Overview</div><a class="nav-item" href="{{ route('admin.dashboard') }}">▦ &nbsp; Dashboard</a>
-@if(in_array($adminRole,['super_admin','administrator','content_manager'],true))<div class="nav-label">Content management</div><a class="nav-item" href="{{ route('admin.programs.index') }}">◇ &nbsp; Programs</a><a class="nav-item" href="{{ route('admin.about.edit') }}">♡ &nbsp; About page</a><a class="nav-item" href="{{ route('admin.site-pages.index') }}">▤ &nbsp; Website pages</a>@endif
-<div class="nav-label">Operations</div>
-@php($opNav = [
- ['key'=>'donations','label'=>'Donations & receipts','roles'=>['super_admin','administrator','finance_manager'],'icon'=>'₵'],
- ['key'=>'impact','label'=>'Projects & impact','roles'=>['super_admin','administrator','content_manager'],'icon'=>'↗'],
- ['key'=>'stories','label'=>'Stories & news','roles'=>['super_admin','administrator','content_manager'],'icon'=>'▤'],
- ['key'=>'gallery','label'=>'Gallery management','roles'=>['super_admin','administrator','content_manager'],'icon'=>'▧'],
- ['key'=>'volunteers','label'=>'Volunteer applications','roles'=>['super_admin','administrator','content_manager','finance_manager'],'icon'=>'♙'],
- ['key'=>'enquiries','label'=>'Contact & enquiries','roles'=>['super_admin','administrator','content_manager','finance_manager'],'icon'=>'✉']
-])
-@foreach($opNav as $item) @if(in_array($adminRole,$item['roles'],true))
-<a class="nav-item {{ $config['key']===$item['key'] ? 'active' : '' }}" href="{{ route('admin.operations.index',$item['key']) }}">{{ $item['icon'] }} &nbsp; {{ $item['label'] }}</a>
-@endif @endforeach
-@if($adminRole==='super_admin')<div class="nav-label">Administration</div><a class="nav-item" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>@endif
-<div class="nav-label">Public website</div><a class="nav-item" href="{{ route('home') }}" target="_blank" rel="noopener">↗ &nbsp; View website</a>
-</nav>
-<div class="side-foot"><div class="side-card"><b class="small">Operations workspace</b><p>Manage submissions, review records and publish approved content from one place.</p><a href="{{ route('admin.dashboard') }}">Return to dashboard ↗</a></div></div>
-</aside>
+@php
+    $opNav = [
+        ['key' => 'donations', 'label' => 'Donations & receipts', 'roles' => ['super_admin', 'administrator', 'finance_manager']],
+        ['key' => 'impact', 'label' => 'Projects & impact', 'roles' => ['super_admin', 'administrator', 'content_manager']],
+        ['key' => 'stories', 'label' => 'Stories & news', 'roles' => ['super_admin', 'administrator', 'content_manager']],
+        ['key' => 'gallery', 'label' => 'Gallery management', 'roles' => ['super_admin', 'administrator', 'content_manager']],
+        ['key' => 'volunteers', 'label' => 'Volunteer applications', 'roles' => ['super_admin', 'administrator', 'content_manager', 'finance_manager']],
+        ['key' => 'enquiries', 'label' => 'Contact enquiries', 'roles' => ['super_admin', 'administrator', 'content_manager', 'finance_manager']],
+    ];
+@endphp
+@include('admin.partials.sidebar')
 <div class="main">
 <header class="topbar"><button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu">☰</button><div><b>Operations workspace</b><div class="xs muted">{{ $config['title'] }} · Manage foundation records</div></div><div class="top-actions"><a class="btn btn-outline btn-sm" href="{{ route('admin.dashboard') }}">Dashboard</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button class="btn btn-outline btn-sm" type="submit">Sign out</button></form></div></header>
 <main class="content op-wrap">
