@@ -10,6 +10,7 @@ use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\PublicAuthController;
 use App\Http\Controllers\OperationsPublicController;
 use App\Http\Controllers\Admin\OperationsController;
+use App\Http\Controllers\Admin\SitePageContentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/test-route', function () {
@@ -20,17 +21,17 @@ Route::get('/route-probe', function () {
     return response('ROOT ROUTE TEST OK', 200);
 });
 
-Route::view('/', 'public.home')->name('home');
+Route::get('/', fn () => view('public.site-page', ['page' => \App\Models\SitePageContent::where('page_key', 'home')->firstOrFail(), 'records' => collect()]))->name('home');
 Route::get('/about', AboutPageController::class)->name('about');
 Route::get('/programs', ProgramPageController::class)->name('programs');
 Route::get('/impact', [OperationsPublicController::class, 'impact'])->name('impact');
 Route::get('/stories', [OperationsPublicController::class, 'stories'])->name('stories');
 Route::get('/stories/{slug}', [OperationsPublicController::class, 'story'])->where('slug', '[a-zA-Z0-9-]+')->name('stories.show');
 Route::get('/gallery', [OperationsPublicController::class, 'gallery'])->name('gallery');
-Route::view('/get-involved', 'public.get-involved')->name('get-involved');
+Route::get('/get-involved', fn () => view('public.site-page', ['page' => \App\Models\SitePageContent::where('page_key', 'get-involved')->firstOrFail(), 'records' => collect()]))->name('get-involved');
 Route::post('/donate', [OperationsPublicController::class, 'donate'])->middleware('throttle:5,1')->name('donate.submit');
 Route::post('/volunteer', [OperationsPublicController::class, 'volunteer'])->middleware('throttle:5,1')->name('volunteer.submit');
-Route::get('/contact', fn () => view('public.contact'))->name('contact');
+Route::get('/contact', fn () => view('public.site-page', ['page' => \App\Models\SitePageContent::where('page_key', 'contact')->firstOrFail(), 'records' => collect()]))->name('contact');
 Route::post('/contact', [OperationsPublicController::class, 'contact'])->middleware('throttle:5,1')->name('contact.submit');
 
 // Public-user authentication, separate from the admin route group.
@@ -69,6 +70,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // About page editor uses the same active-admin and content-role checks as programs.
     Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('about.edit');
     Route::put('/about', [AdminAboutPageController::class, 'update'])->middleware('throttle:20,1')->name('about.update');
+
+    // Editable public pages use the same active-admin and content-role checks as About and Programs.
+    Route::get('/site-pages', [SitePageContentController::class, 'index'])->name('site-pages.index');
+    Route::get('/site-pages/{page}/edit', [SitePageContentController::class, 'edit'])->where('page', 'home|impact|stories|contact|get-involved')->name('site-pages.edit');
+    Route::put('/site-pages/{page}', [SitePageContentController::class, 'update'])->where('page', 'home|impact|stories|contact|get-involved')->middleware('throttle:20,1')->name('site-pages.update');
 
     // Unified operations modules. Every controller action re-checks the active admin and role.
     Route::get('/operations/{module}', [OperationsController::class, 'index'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.index');

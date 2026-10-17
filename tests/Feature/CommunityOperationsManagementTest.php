@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\SitePageContentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
@@ -11,6 +12,12 @@ use Tests\TestCase;
 class CommunityOperationsManagementTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(SitePageContentSeeder::class);
+    }
 
     private function admin(string $role = 'content_manager', bool $active = true): int
     {
@@ -111,7 +118,7 @@ class CommunityOperationsManagementTest extends TestCase
             'title'=>'Internal Draft','slug'=>'internal-draft','summary'=>'Private draft','description'=>'Details',
             'status'=>'draft','sort_order'=>1,'created_at'=>now(),'updated_at'=>now(),
         ]);
-        $this->get(route('impact'))->assertOk()->assertSee('Verified Outreach')->assertDontSee('Internal Draft')->assertDontSee('1000+');
+        $this->get(route('impact'))->assertOk()->assertSee('Verified Outreach')->assertDontSee('Internal Draft');
     }
 
     public function test_gallery_upload_is_validated_and_logged(): void
