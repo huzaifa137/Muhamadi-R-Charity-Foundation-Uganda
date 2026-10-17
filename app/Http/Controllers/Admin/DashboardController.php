@@ -50,6 +50,7 @@ class DashboardController extends Controller
                 'pendingDonations' => DB::table('donations')->where('payment_status', 'pending')->count(),
                 'volunteerApplications' => DB::table('volunteer_applications')->whereIn('status', ['new', 'reviewing'])->count(),
                 'openEnquiries' => DB::table('contact_enquiries')->whereIn('status', ['new', 'in_progress'])->count(),
+                'publishedStories' => DB::table('stories')->where('status', 'published')->count(),
             ],
             'recentUsers' => $recentUsers,
             'recentAdminLogins' => $recentAdminLogins,
