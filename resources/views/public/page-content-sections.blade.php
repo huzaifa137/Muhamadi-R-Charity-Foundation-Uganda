@@ -1,5 +1,6 @@
 @if(isset($page) && is_array($page->sections))
     @foreach($page->sections as $index => $section)
+        @if(!empty($section['_changed']))
         <section class="section {{ $index % 2 === 1 ? 'bg-cream' : '' }}">
             <div class="container">
                 <div class="section-head">
@@ -21,6 +22,7 @@
                 @endif
             </div>
         </section>
+        @endif
     @endforeach
 @endif
 
