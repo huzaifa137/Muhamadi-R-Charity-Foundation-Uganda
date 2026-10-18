@@ -12,7 +12,7 @@ class OperationsPublicController extends Controller
 {
     public function impact(): View
     {
-        return view('public.site-page', [
+        return view('public.impact', [
             'page' => SitePageContent::where('page_key', 'impact')->firstOrFail(),
             'records' => DB::table('impact_records')->where('status', 'published')->orderBy('sort_order')->orderByDesc('published_at')->get(),
         ]);
@@ -20,7 +20,7 @@ class OperationsPublicController extends Controller
 
     public function stories(): View
     {
-        return view('public.site-page', [
+        return view('public.stories', [
             'page' => SitePageContent::where('page_key', 'stories')->firstOrFail(),
             'records' => DB::table('stories')->where('status', 'published')->whereNotNull('published_at')->orderByDesc('published_at')->get(),
         ]);
