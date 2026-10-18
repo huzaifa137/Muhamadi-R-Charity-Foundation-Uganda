@@ -371,5 +371,5 @@ table.table{width:100%;border-collapse:collapse;font-size:.82rem}
   .login{grid-template-columns:1fr}.login-art{display:none}
   .mail{grid-template-columns:1fr}.mail-list{max-height:320px;border-right:0;border-bottom:1px solid var(--line)}
 }
-@media(max-width:640px){.g-2,.g-4,.form-grid,.form-grid.c3,.rep-fields.two,.kanban{grid-template-columns:1fr}.btn-label-hide{display:none}.page-head h1{font-size:1.4rem}.top-actions .btn-outline{display:none}.toolbar .search{width:100%}}
+@media(max-width:640px){.g-2,.g-4,.form-grid,.form-grid.c3,.rep-fields.two,.kanban{grid-template-columns:1fr}.btn-label-hide{display:none}.page-head h1{font-size:1.4rem}.top-actions a.btn-outline{display:none}.toolbar .search{width:100%}}
 @media print{.sidebar,.topbar,.page-actions,.save-bar{display:none!important}.app{display:block}}

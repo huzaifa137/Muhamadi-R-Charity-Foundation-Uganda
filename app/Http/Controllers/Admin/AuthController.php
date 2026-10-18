@@ -11,8 +11,23 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
+        // An administrator who is already signed in has no need for the sign-in page.
+        if ($request->session()->has('charity_admin_id')) {
+            $isActive = DB::table('admins')
+                ->where('id', $request->session()->get('charity_admin_id'))
+                ->where('is_active', true)
+                ->exists();
+
+            if ($isActive) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            // Stale or deactivated session: clear it and show the form.
+            $request->session()->forget(['charity_admin_id', 'charity_admin_name']);
+        }
+
         return view('admin.auth.login');
     }
 

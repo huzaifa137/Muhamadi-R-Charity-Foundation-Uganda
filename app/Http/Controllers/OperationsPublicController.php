@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SitePageContent;
+use App\Support\FoundationNotifier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,7 @@ class OperationsPublicController extends Controller
 {
     public function impact(): View
     {
-        return view('public.site-page', [
+        return view('public.impact', [
             'page' => SitePageContent::where('page_key', 'impact')->firstOrFail(),
             'records' => DB::table('impact_records')->where('status', 'published')->orderBy('sort_order')->orderByDesc('published_at')->get(),
         ]);
@@ -20,7 +21,7 @@ class OperationsPublicController extends Controller
 
     public function stories(): View
     {
-        return view('public.site-page', [
+        return view('public.stories', [
             'page' => SitePageContent::where('page_key', 'stories')->firstOrFail(),
             'records' => DB::table('stories')->where('status', 'published')->whereNotNull('published_at')->orderByDesc('published_at')->get(),
         ]);
@@ -56,6 +57,8 @@ class OperationsPublicController extends Controller
             'payment_status' => 'pending', 'reference' => null, 'donation_date' => now()->toDateString(),
             'admin_notes' => 'Public donation pledge; payment must be verified by an administrator.', 'created_at' => now(), 'updated_at' => now(),
         ]);
+        FoundationNotifier::send($data['email'] ?? null, 'Donation pledge received', 'Thank you, '.$data['donor_name'].'. Your pledge has been recorded as pending. This is not a payment receipt. The foundation will confirm payment before issuing a receipt.');
+        FoundationNotifier::notifyTeam('New donation pledge received', 'A donation pledge was submitted by '.$data['donor_name'].' for UGX '.number_format((float) $data['amount'], 2).'. Payment status: pending. Please verify payment before issuing a receipt.');
         return redirect()->route('get-involved')->with('status', 'Your donation pledge has been recorded as pending. The team must confirm payment before a receipt can be issued.');
     }
 
@@ -70,6 +73,8 @@ class OperationsPublicController extends Controller
         ]);
         unset($data['consent']);
         DB::table('volunteer_applications')->insert($data + ['status' => 'new', 'admin_notes' => null, 'created_at' => now(), 'updated_at' => now()]);
+        FoundationNotifier::send($data['email'], 'Volunteer application received', 'Thank you, '.$data['name'].'. Your volunteer application has been received and is awaiting review by the foundation team.');
+        FoundationNotifier::notifyTeam('New volunteer application', 'A volunteer application was submitted by '.$data['name'].' ('.$data['email'].') for '.$data['area_of_interest'].'. Please review it in the admin console.');
         return redirect()->route('get-involved')->with('status', 'Your volunteer application has been submitted for review.');
     }
 
@@ -81,6 +86,8 @@ class OperationsPublicController extends Controller
             'subject' => ['required', 'string', 'max:180'], 'message' => ['required', 'string', 'max:10000'],
         ]);
         DB::table('contact_enquiries')->insert($data + ['status' => 'new', 'admin_notes' => null, 'response_notes' => null, 'responded_at' => null, 'created_at' => now(), 'updated_at' => now()]);
+        FoundationNotifier::send($data['email'], 'We received your message', 'Thank you, '.$data['name'].'. Your message has been received by Muhamadi R Charity Foundation Uganda. The team will review your enquiry.');
+        FoundationNotifier::notifyTeam('New public contact enquiry', 'A new contact enquiry was submitted by '.$data['name'].' ('.$data['email'].'). Subject: '.$data['subject'].'. Please review it in the admin console.');
         return redirect()->route('contact')->with('status', 'Thank you. Your enquiry has been saved and is awaiting review.');
     }
 }

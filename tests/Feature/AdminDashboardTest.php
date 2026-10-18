@@ -14,7 +14,7 @@ class AdminDashboardTest extends TestCase
     public function test_admin_dashboard_rejects_requests_without_an_admin_session(): void
     {
         $this->get(route('admin.dashboard'))
-            ->assertForbidden();
+            ->assertRedirect(route('admin.login'));
     }
 
     public function test_admin_dashboard_shows_live_database_counts_for_an_active_admin(): void
@@ -62,6 +62,6 @@ class AdminDashboardTest extends TestCase
 
         $this->withSession(['charity_admin_id' => $adminId])
             ->get(route('admin.dashboard'))
-            ->assertForbidden();
+            ->assertRedirect(route('admin.login'));
     }
 }

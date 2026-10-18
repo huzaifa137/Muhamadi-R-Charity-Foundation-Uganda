@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\Support\FoundationNotifier;
 use Illuminate\View\View;
 
 class OperationsController extends Controller
 {
     private const CONTENT_ROLES = ['super_admin', 'administrator', 'content_manager'];
     private const RECORD_ROLES = ['super_admin', 'administrator', 'content_manager', 'finance_manager'];
+    private const VOLUNTEER_ROLES = ['super_admin', 'administrator', 'content_manager', 'finance_manager', 'volunteer_coordinator'];
     private const FINANCE_ROLES = ['super_admin', 'administrator', 'finance_manager'];
 
     private function config(string $module): array
@@ -41,7 +43,7 @@ class OperationsController extends Controller
                 ['name'=>'title','label'=>'Image title','type'=>'text','required'=>true], ['name'=>'caption','label'=>'Caption','type'=>'textarea'], ['name'=>'alt_text','label'=>'Accessibility alt text','type'=>'text','required'=>true],
                 ['name'=>'category','label'=>'Category','type'=>'text'], ['name'=>'image_path','label'=>'Image file (JPEG, PNG, WebP; max 5 MB)','type'=>'file'], ['name'=>'status','label'=>'Publication status','type'=>'select','options'=>['draft'=>'Draft','published'=>'Published'],'required'=>true], ['name'=>'sort_order','label'=>'Display order','type'=>'number','required'=>true],
             ]],
-            'volunteers' => ['table' => 'volunteer_applications', 'title' => 'Volunteer applications', 'description' => 'Review applications and record follow-up decisions.', 'roles' => self::RECORD_ROLES, 'fields' => [
+            'volunteers' => ['table' => 'volunteer_applications', 'title' => 'Volunteer applications', 'description' => 'Review applications and record follow-up decisions.', 'roles' => self::VOLUNTEER_ROLES, 'fields' => [
                 ['name'=>'name','label'=>'Applicant name','type'=>'text','required'=>true], ['name'=>'email','label'=>'Email','type'=>'email','required'=>true], ['name'=>'phone','label'=>'Phone','type'=>'text'],
                 ['name'=>'area_of_interest','label'=>'Area of interest','type'=>'text','required'=>true], ['name'=>'availability','label'=>'Availability','type'=>'text'], ['name'=>'experience','label'=>'Experience / skills','type'=>'textarea'],
                 ['name'=>'motivation','label'=>'Motivation','type'=>'textarea','required'=>true], ['name'=>'status','label'=>'Review status','type'=>'select','options'=>['new'=>'New','reviewing'=>'Reviewing','approved'=>'Approved','declined'=>'Declined'],'required'=>true], ['name'=>'admin_notes','label'=>'Internal review notes','type'=>'textarea'],
@@ -125,6 +127,7 @@ class OperationsController extends Controller
         if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => Str::slug((string) ($request->input('slug') ?: $request->input('title')))]);
         $data = $this->validated($request, $config, $id);
         $data = $this->prepare($request, $config, $data, $record);
+        $becamePaid = $module === 'donations' && $record->payment_status !== 'paid' && ($data['payment_status'] ?? $record->payment_status) === 'paid';
         $data['updated_at'] = now();
         if ($module === 'donations' && ($data['payment_status'] ?? $record->payment_status) === 'paid' && empty($record->receipt_number)) {
             $data['receipt_number'] = 'MRF-'.now()->format('Ymd').'-'.str_pad((string) $id, 6, '0', STR_PAD_LEFT);
@@ -134,6 +137,20 @@ class OperationsController extends Controller
         }
         DB::table($config['table'])->where('id', $id)->update($data);
         $this->log($admin, $module, 'updated', $id, ['status' => $data['status'] ?? $data['payment_status'] ?? 'updated']);
+        if ($module === 'volunteers' && isset($data['status']) && $data['status'] !== $record->status) {
+            $updatedApplicant = DB::table('volunteer_applications')->where('id', $id)->first();
+            FoundationNotifier::send($updatedApplicant->email, 'Volunteer application status updated', 'Hello '.$updatedApplicant->name.'. Your volunteer application status is now: '.str_replace('_', ' ', $updatedApplicant->status).'. Please contact the foundation if you need more information.');
+        }
+        if ($module === 'enquiries' && ($data['status'] ?? null) === 'responded' && !empty($data['response_notes'])) {
+            $updatedEnquiry = DB::table('contact_enquiries')->where('id', $id)->first();
+            FoundationNotifier::send($updatedEnquiry->email, 'Update regarding your enquiry', 'Hello '.$updatedEnquiry->name.'. The foundation has added the following response to your enquiry: '.$updatedEnquiry->response_notes);
+        }
+        if ($becamePaid) {
+            $confirmed = DB::table('donations')->where('id', $id)->first();
+            $body = 'Thank you. Payment has been confirmed by Muhamadi R Charity Foundation Uganda. Receipt number: '.$confirmed->receipt_number.'. Amount: '.$confirmed->currency.' '.number_format((float) $confirmed->amount, 2).'. Date: '.$confirmed->donation_date.'.';
+            FoundationNotifier::send($confirmed->email, 'Donation payment confirmed — receipt '.$confirmed->receipt_number, $body);
+            FoundationNotifier::notifyTeam('Donation payment confirmed', 'Donation #'.$confirmed->id.' was marked paid by an administrator. Receipt number: '.$confirmed->receipt_number.'.');
+        }
         return redirect()->route('admin.operations.index', $module)->with('status', $config['title'].' record updated.');
     }
 

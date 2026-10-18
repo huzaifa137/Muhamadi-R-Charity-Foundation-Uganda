@@ -30,11 +30,11 @@ class CommunityOperationsManagementTest extends TestCase
 
     public function test_operations_require_active_authorised_admins(): void
     {
-        $this->get(route('admin.operations.index', 'donations'))->assertForbidden();
+        $this->get(route('admin.operations.index', 'donations'))->assertRedirect(route('admin.login'));
         $finance = $this->admin('finance_manager');
         $this->withSession(['charity_admin_id' => $finance])->get(route('admin.operations.index', 'stories'))->assertForbidden();
         $inactive = $this->admin('administrator', false);
-        $this->withSession(['charity_admin_id' => $inactive])->get(route('admin.operations.index', 'enquiries'))->assertForbidden();
+        $this->withSession(['charity_admin_id' => $inactive])->get(route('admin.operations.index', 'enquiries'))->assertRedirect(route('admin.login'));
     }
 
     public function test_operations_register_uses_shared_admin_shell_and_module_navigation(): void

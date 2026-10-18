@@ -1,4 +1,4 @@
-﻿@extends('layouts.public')
+@extends('layouts.public')
 
 @section('title', 'Gallery | Muhamadi R Charity Foundation Uganda')
 @section('page-key', 'gallery')

@@ -55,6 +55,7 @@ class SitePageContentController extends Controller
         ]);
 
         $sections = [];
+        $existingSections = $content->sections ?? [];
         foreach ($data['sections'] as $index => $section) {
             $items = [];
             foreach (preg_split('/\r\n|\r|\n/', $section['items_text'] ?? '') ?: [] as $line) {
@@ -65,12 +66,21 @@ class SitePageContentController extends Controller
                 $items[] = ['title' => $parts[0], 'description' => $parts[1]];
             }
             abort_if(count($items) > 20, 422, 'Each section can contain at most 20 items.');
+            $existing = $existingSections[$index] ?? [];
+            $changed = !empty($existing['_changed'])
+                || ($existing['eyebrow'] ?? '') !== ($section['eyebrow'] ?? '')
+                || ($existing['title'] ?? '') !== $section['title']
+                || ($existing['body'] ?? '') !== $section['body']
+                || ($existing['image_path'] ?? '') !== ($section['image_path'] ?? '')
+                || ($existing['items'] ?? []) !== $items;
+
             $sections[] = [
                 'eyebrow' => $section['eyebrow'] ?? '',
                 'title' => $section['title'],
                 'body' => $section['body'],
                 'image_path' => $section['image_path'] ?? '',
                 'items' => $items,
+                '_changed' => $changed,
             ];
         }
 

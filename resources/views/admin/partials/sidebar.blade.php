@@ -4,7 +4,10 @@
     $canManageContent = in_array($sidebarRole, ['super_admin', 'administrator', 'content_manager'], true);
     $canManageFinance = in_array($sidebarRole, ['super_admin', 'administrator', 'finance_manager'], true);
     $canManageRecords = in_array($sidebarRole, ['super_admin', 'administrator', 'content_manager', 'finance_manager'], true);
+    $canManageVolunteers = in_array($sidebarRole, ['super_admin', 'administrator', 'content_manager', 'finance_manager', 'volunteer_coordinator'], true);
     $activeOperation = request()->route('module');
+    $canViewReports = in_array($sidebarRole, ['super_admin', 'administrator', 'finance_manager', 'content_manager', 'volunteer_coordinator'], true);
+    $canManageSettings = in_array($sidebarRole, ['super_admin', 'administrator'], true);
 @endphp
 <aside class="sidebar" id="sidebar">
     <a class="side-brand" href="{{ route('admin.dashboard') }}">
@@ -32,15 +35,26 @@
                 <a class="nav-item {{ $activeOperation === 'stories' ? 'active' : '' }}" href="{{ route('admin.operations.index', 'stories') }}">▣ &nbsp; Stories & news</a>
                 <a class="nav-item {{ $activeOperation === 'gallery' ? 'active' : '' }}" href="{{ route('admin.operations.index', 'gallery') }}">▧ &nbsp; Gallery</a>
             @endif
-            @if($canManageRecords)
+            @if($canManageVolunteers)
                 <a class="nav-item {{ $activeOperation === 'volunteers' ? 'active' : '' }}" href="{{ route('admin.operations.index', 'volunteers') }}">♧ &nbsp; Volunteers</a>
+            @endif
+            @if($canManageRecords)
                 <a class="nav-item {{ $activeOperation === 'enquiries' ? 'active' : '' }}" href="{{ route('admin.operations.index', 'enquiries') }}">✉ &nbsp; Contact enquiries</a>
             @endif
         @endif
 
-        @if($sidebarRole === 'super_admin')
+        @if($canViewReports)
+            <div class="nav-label">Insights</div>
+            <a class="nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}" href="{{ route('admin.reports.index') }}">▤ &nbsp; Reports &amp; exports</a>
+        @endif
+
+        @if($canManageSettings)
             <div class="nav-label">Administration</div>
-            <a class="nav-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff & permissions</a>
+            <a class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">⚙ &nbsp; Foundation settings</a>
+            <a class="nav-item {{ request()->routeIs('admin.activity-log.*') ? 'active' : '' }}" href="{{ route('admin.activity-log.index') }}">◷ &nbsp; Activity log</a>
+            @if($sidebarRole === 'super_admin')
+                <a class="nav-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>
+            @endif
         @endif
 
         <div class="nav-label">Public website</div>
