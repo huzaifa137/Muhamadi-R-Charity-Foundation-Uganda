@@ -5,6 +5,30 @@
                 <div class="section-head">
                     <div>
                         @if(!empty($section['eyebrow']))<span class="eyebrow">{{ $section['eyebrow'] }}</span>@endif
+@if(isset($records) && $records->isNotEmpty() && isset($page) && in_array($page->page_key, ['impact', 'stories'], true))
+    <section class="section bg-cream">
+        <div class="container">
+            <div class="section-head">
+                <div><span class="eyebrow">{{ $page->page_key === 'impact' ? 'Published project records' : 'Published stories' }}</span><h2 class="h2">{{ $page->page_key === 'impact' ? 'Projects and impact updates' : 'Stories from the foundation' }}</h2></div>
+                <p class="lead">{{ $page->page_key === 'impact' ? 'Approved progress updates and evidence from published projects.' : 'Articles and field updates approved for public viewing.' }}</p>
+            </div>
+            <div class="grid-3">
+                @foreach($records as $record)
+                    <article class="story-card reveal">
+                        @if($record->image_path)<div class="card-media"><img src="{{ asset($record->image_path) }}" alt="{{ $record->title }}" loading="lazy"></div>@endif
+                        <div class="card-body">
+                            <span class="pill">{{ $record->category ?: ($page->page_key === 'impact' ? 'Project update' : 'Foundation story') }}</span>
+                            <h3>{{ $record->title }}</h3>
+                            <p>{{ $page->page_key === 'impact' ? $record->summary : $record->excerpt }}</p>
+                            @if($page->page_key === 'impact' && $record->beneficiaries_count !== null)<p class="muted">Verified beneficiaries: {{ number_format($record->beneficiaries_count) }}</p>@endif
+                            @if($page->page_key === 'stories')<a class="card-link" href="{{ route('stories.show', $record->slug) }}">Read story <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a>@endif
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+@endif
                         <h2 class="h2">{{ $section['title'] }}</h2>
                     </div>
                     <p class="lead">{{ $section['body'] }}</p>
