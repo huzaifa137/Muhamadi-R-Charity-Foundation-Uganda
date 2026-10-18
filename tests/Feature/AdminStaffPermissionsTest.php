@@ -29,7 +29,7 @@ class AdminStaffPermissionsTest extends TestCase
 
     public function test_staff_page_rejects_requests_without_an_admin_session(): void
     {
-        $this->get(route('admin.staff.index'))->assertForbidden();
+        $this->get(route('admin.staff.index'))->assertRedirect(route('admin.login'));
     }
 
     public function test_non_super_admin_cannot_open_staff_management(): void

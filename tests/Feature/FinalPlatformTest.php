@@ -43,7 +43,7 @@ class FinalPlatformTest extends TestCase
 
     public function test_reports_are_protected_and_csv_export_uses_real_records(): void
     {
-        $this->get(route('admin.reports.index'))->assertForbidden();
+        $this->get(route('admin.reports.index'))->assertRedirect(route('admin.login'));
         $admin = $this->admin('finance_manager');
         $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.index'))->assertOk()->assertSee('Reports &amp; exports', false);
 
@@ -122,7 +122,7 @@ class FinalPlatformTest extends TestCase
     public function test_inactive_admin_cannot_access_reports_or_settings(): void
     {
         $admin = $this->admin('administrator', false);
-        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.index'))->assertForbidden();
-        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.settings.edit'))->assertForbidden();
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.index'))->assertRedirect(route('admin.login'));
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.settings.edit'))->assertRedirect(route('admin.login'));
     }
 }

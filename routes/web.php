@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\PasswordResetController as AdminPasswordResetController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\ProgramController;
@@ -35,6 +36,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [PublicAuthController::class, 'login'])->middleware('throttle:10,1')->name('login.submit');
     Route::get('/register', [PublicAuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [PublicAuthController::class, 'register'])->middleware('throttle:5,1')->name('register.submit');
+
+    // Public-user password reset (names are the ones Laravel's reset email expects).
+    Route::get('/forgot-password', [PublicAuthController::class, 'showForgot'])->name('password.request');
+    Route::post('/forgot-password', [PublicAuthController::class, 'sendResetLink'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/reset-password/{token}', [PublicAuthController::class, 'showReset'])->name('password.reset');
+    Route::post('/reset-password', [PublicAuthController::class, 'resetPassword'])->middleware('throttle:5,1')->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,43 +53,52 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/forgot-password', [AdminPasswordResetController::class, 'showForgot'])->name('password.request');
+    Route::post('/forgot-password', [AdminPasswordResetController::class, 'sendLink'])->middleware('throttle:5,1')->name('password.email');
+    Route::get('/reset-password/{token}', [AdminPasswordResetController::class, 'showReset'])->name('password.reset');
+    Route::post('/reset-password', [AdminPasswordResetController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
 
-    // StaffController verifies an active administrator and Super Administrator role
-    // on every management action, independently of whether the route is bookmarked.
-    Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
-    Route::post('/staff', [StaffController::class, 'store'])->middleware('throttle:10,1')->name('staff.store');
-    Route::put('/staff/{id}', [StaffController::class, 'update'])->whereNumber('id')->middleware('throttle:20,1')->name('staff.update');
+    // Everything below requires a signed-in, active administrator. Controllers still
+    // enforce each role's permissions on top of this.
+    Route::middleware('admin.auth')->group(function () {
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    // ProgramController enforces active-session and content-role access checks.
-    Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
-    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create');
-    Route::post('/programs', [ProgramController::class, 'store'])->middleware('throttle:20,1')->name('programs.store');
-    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
-    Route::put('/programs/{program}', [ProgramController::class, 'update'])->middleware('throttle:30,1')->name('programs.update');
-    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->middleware('throttle:10,1')->name('programs.destroy');
+        // StaffController verifies an active administrator and Super Administrator role
+        // on every management action, independently of whether the route is bookmarked.
+        Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+        Route::post('/staff', [StaffController::class, 'store'])->middleware('throttle:10,1')->name('staff.store');
+        Route::put('/staff/{id}', [StaffController::class, 'update'])->whereNumber('id')->middleware('throttle:20,1')->name('staff.update');
 
-    // About page editor uses the same active-admin and content-role checks as programs.
-    Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('about.edit');
-    Route::put('/about', [AdminAboutPageController::class, 'update'])->middleware('throttle:20,1')->name('about.update');
+        // ProgramController enforces active-session and content-role access checks.
+        Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
+        Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create');
+        Route::post('/programs', [ProgramController::class, 'store'])->middleware('throttle:20,1')->name('programs.store');
+        Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
+        Route::put('/programs/{program}', [ProgramController::class, 'update'])->middleware('throttle:30,1')->name('programs.update');
+        Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->middleware('throttle:10,1')->name('programs.destroy');
 
-    // Editable public pages use the same active-admin and content-role checks as About and Programs.
-    Route::get('/site-pages', [SitePageContentController::class, 'index'])->name('site-pages.index');
-    Route::get('/site-pages/{page}/edit', [SitePageContentController::class, 'edit'])->where('page', 'home|impact|stories|contact|get-involved')->name('site-pages.edit');
-    Route::put('/site-pages/{page}', [SitePageContentController::class, 'update'])->where('page', 'home|impact|stories|contact|get-involved')->middleware('throttle:20,1')->name('site-pages.update');
+        // About page editor uses the same active-admin and content-role checks as programs.
+        Route::get('/about', [AdminAboutPageController::class, 'edit'])->name('about.edit');
+        Route::put('/about', [AdminAboutPageController::class, 'update'])->middleware('throttle:20,1')->name('about.update');
 
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::get('/reports/{report}/export.csv', [ReportsController::class, 'export'])->where('report', 'donations|projects|stories|volunteers|enquiries')->middleware('throttle:10,1')->name('reports.export');
-    Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
-    Route::put('/settings', [SettingsController::class, 'update'])->middleware('throttle:10,1')->name('settings.update');
-    Route::get('/activity-log', [SettingsController::class, 'activityLog'])->name('activity-log.index');
+        // Editable public pages use the same active-admin and content-role checks as About and Programs.
+        Route::get('/site-pages', [SitePageContentController::class, 'index'])->name('site-pages.index');
+        Route::get('/site-pages/{page}/edit', [SitePageContentController::class, 'edit'])->where('page', 'home|impact|stories|contact|get-involved')->name('site-pages.edit');
+        Route::put('/site-pages/{page}', [SitePageContentController::class, 'update'])->where('page', 'home|impact|stories|contact|get-involved')->middleware('throttle:20,1')->name('site-pages.update');
 
-    // Unified operations modules. Every controller action re-checks the active admin and role.
-    Route::get('/operations/{module}', [OperationsController::class, 'index'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.index');
-    Route::get('/operations/{module}/create', [OperationsController::class, 'create'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.create');
-    Route::post('/operations/{module}', [OperationsController::class, 'store'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->middleware('throttle:20,1')->name('operations.store');
-    Route::get('/operations/{module}/{id}/edit', [OperationsController::class, 'edit'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->name('operations.edit');
-    Route::put('/operations/{module}/{id}', [OperationsController::class, 'update'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->middleware('throttle:30,1')->name('operations.update');
-    Route::delete('/operations/{module}/{id}', [OperationsController::class, 'destroy'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->middleware('throttle:10,1')->name('operations.destroy');
-    Route::get('/donations/{id}/receipt', [OperationsController::class, 'receipt'])->whereNumber('id')->name('donations.receipt');
+        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+        Route::get('/reports/{report}/export.csv', [ReportsController::class, 'export'])->where('report', 'donations|projects|stories|volunteers|enquiries')->middleware('throttle:10,1')->name('reports.export');
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings', [SettingsController::class, 'update'])->middleware('throttle:10,1')->name('settings.update');
+        Route::get('/activity-log', [SettingsController::class, 'activityLog'])->name('activity-log.index');
+
+        // Unified operations modules. Every controller action re-checks the active admin and role.
+        Route::get('/operations/{module}', [OperationsController::class, 'index'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.index');
+        Route::get('/operations/{module}/create', [OperationsController::class, 'create'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->name('operations.create');
+        Route::post('/operations/{module}', [OperationsController::class, 'store'])->where('module', 'donations|impact|stories|gallery|volunteers|enquiries')->middleware('throttle:20,1')->name('operations.store');
+        Route::get('/operations/{module}/{id}/edit', [OperationsController::class, 'edit'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->name('operations.edit');
+        Route::put('/operations/{module}/{id}', [OperationsController::class, 'update'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->middleware('throttle:30,1')->name('operations.update');
+        Route::delete('/operations/{module}/{id}', [OperationsController::class, 'destroy'])->where(['module' => 'donations|impact|stories|gallery|volunteers|enquiries', 'id' => '[0-9]+'])->middleware('throttle:10,1')->name('operations.destroy');
+        Route::get('/donations/{id}/receipt', [OperationsController::class, 'receipt'])->whereNumber('id')->name('donations.receipt');
+    });
 });

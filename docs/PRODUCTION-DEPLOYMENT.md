@@ -4,11 +4,15 @@ This change prepares the application for deployment; it does not deploy to a liv
 
 ## Required production configuration
 
-- Set APP_ENV=production, APP_DEBUG=false, APP_URL to the HTTPS domain, and a valid unique APP_KEY.
+- Start from `.env.production.example`. Set APP_ENV=production, APP_DEBUG=false, APP_URL to the HTTPS domain, and a valid unique APP_KEY.
 - Configure the production database, HTTPS, secure session cookies, and MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS, and MAIL_FROM_NAME.
 - Set FOUNDATION_NOTIFICATION_EMAIL to the monitored mailbox for new contact, volunteer and donation-pledge notifications.
 - Configure a persistent queue worker if QUEUE_CONNECTION is changed to a queued driver.
 - Never commit .env, database dumps, uploaded files, credentials or production user data to Git.
+
+- Password reset (admins and public users) sends email, so MAIL_MAILER must be a real SMTP service in production. With MAIL_MAILER=log the reset link only appears in storage/logs/laravel.log.
+- Session cookies become HTTPS-only automatically when APP_URL starts with https:// (or set SESSION_SECURE_COOKIE=true). Do not run production over plain HTTP.
+- Run `php artisan migrate --force` after pulling: it creates the admin_password_reset_tokens table.
 
 ## Deployment checklist
 

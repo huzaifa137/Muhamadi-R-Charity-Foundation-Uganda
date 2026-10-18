@@ -10,14 +10,14 @@
 <div class="topbar">
 <div class="container topbar-inner">
 <span>Serving communities through compassion, dignity and practical support.</span>
-<div class="topbar-links"><a href="mailto:{{ $publicEmail }}">{{ $publicEmail }}</a><span>â€¢</span><a href="tel:{{ $publicPhone }}">{{ $publicPhone }}</a></div>
+<div class="topbar-links"><a href="mailto:{{ $publicEmail }}">{{ $publicEmail }}</a><span>•</span><a href="tel:{{ $publicPhone }}">{{ $publicPhone }}</a></div>
 </div>
 </div>
 <header class="site-header">
 <div class="container nav">
 <a aria-label="Muhamadi R Charity Foundation Uganda home" class="brand" href="{{ route('home') }}">
 <img alt="Muhamadi R Charity Foundation Uganda logo" src="{{ asset('assets/images/logo.webp') }}"/>
-<span class="brand-text"><span class="brand-name">{{ $foundationName }}</span><span class="brand-sub"> â€¢
+<span class="brand-text"><span class="brand-name">{{ $foundationName }}</span><span class="brand-sub"> •
             Charity &amp; Community Support</span></span>
 </a>
 <button aria-expanded="false" aria-label="Open navigation" class="menu-toggle"><span></span><span></span><span></span></button>

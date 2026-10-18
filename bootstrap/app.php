@@ -13,6 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Signed-in public users who open /login or /register go to their dashboard.
         $middleware->redirectUsersTo(fn () => route('dashboard'));
+
+        // One gatekeeper for every protected /admin route (see routes/web.php).
+        $middleware->alias([
+            'admin.auth' => \App\Http\Middleware\EnsureAdminAuthenticated::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

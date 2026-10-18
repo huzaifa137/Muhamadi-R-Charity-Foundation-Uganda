@@ -16,6 +16,8 @@
         <label class="auth-remember"><input type="checkbox" name="remember" value="1"> Keep me signed in</label>
         <button type="submit" class="btn btn-primary auth-submit">Sign in</button>
     </form>
+    @if (session('status')) <div class="auth-hint" role="status">{{ session('status') }}</div> @endif
+    <p class="auth-switch"><a href="{{ route('password.request') }}">Forgot your password?</a></p>
     <p class="auth-switch">New here? <a href="{{ route('register') }}">Create a public account</a></p>
     <p class="auth-admin-link">Foundation staff? <a href="{{ route('admin.login') }}">Admin / Staff login</a></p>
 </div></div></section>

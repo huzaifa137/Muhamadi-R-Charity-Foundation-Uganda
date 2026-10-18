@@ -1,10 +1,11 @@
 name: Laravel tests
 
 on:
-  pull_request:
-    branches: [main, feature/about-page-content-management, feature/community-operations-management, feature/operations-admin-ui, feature/dynamic-public-page-content, feature/admin-navigation-and-site-pages-ui, feature/final-platform-and-design-restoration]
+  # Every branch is tested on push, so new branches never fall off the list again.
   push:
-    branches: [feature/community-operations-management, feature/operations-admin-ui, feature/dynamic-public-page-content, feature/admin-navigation-and-site-pages-ui, feature/final-platform-and-design-restoration]
+    branches: ['**']
+  pull_request:
+    branches: ['**']
 
 jobs:
   test:
