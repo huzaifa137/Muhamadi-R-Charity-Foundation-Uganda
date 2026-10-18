@@ -1,10 +1,10 @@
 @php
     $publicSettings = \Illuminate\Support\Facades\Schema::hasTable('foundation_settings')
-        ? \Illuminate\Support\Facades\DB::table('foundation_settings')->pluck('value', 'key')
-        : collect();
+        ? \Illuminate\Support\Facades\DB::table('foundation_settings')->pluck('value', 'key')->all()
+        : [];
     $foundationName = $publicSettings['foundation_name'] ?? 'Muhamadi R Charity Foundation';
-    $publicEmail = $publicSettings['public_email'] ?: 'info@muhamadircharity.org';
-    $publicPhone = $publicSettings['public_phone'] ?: '+256 700 000 000';
+    $publicEmail = ($publicSettings['public_email'] ?? null) ?: 'info@muhamadircharity.org';
+    $publicPhone = ($publicSettings['public_phone'] ?? null) ?: '+256 700 000 000';
 @endphp
 <div class="progress"></div>
 <div class="topbar">
