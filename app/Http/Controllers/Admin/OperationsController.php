@@ -15,6 +15,7 @@ class OperationsController extends Controller
 {
     private const CONTENT_ROLES = ['super_admin', 'administrator', 'content_manager'];
     private const RECORD_ROLES = ['super_admin', 'administrator', 'content_manager', 'finance_manager'];
+    private const VOLUNTEER_ROLES = ['super_admin', 'administrator', 'content_manager', 'finance_manager', 'volunteer_coordinator'];
     private const FINANCE_ROLES = ['super_admin', 'administrator', 'finance_manager'];
 
     private function config(string $module): array
@@ -42,7 +43,7 @@ class OperationsController extends Controller
                 ['name'=>'title','label'=>'Image title','type'=>'text','required'=>true], ['name'=>'caption','label'=>'Caption','type'=>'textarea'], ['name'=>'alt_text','label'=>'Accessibility alt text','type'=>'text','required'=>true],
                 ['name'=>'category','label'=>'Category','type'=>'text'], ['name'=>'image_path','label'=>'Image file (JPEG, PNG, WebP; max 5 MB)','type'=>'file'], ['name'=>'status','label'=>'Publication status','type'=>'select','options'=>['draft'=>'Draft','published'=>'Published'],'required'=>true], ['name'=>'sort_order','label'=>'Display order','type'=>'number','required'=>true],
             ]],
-            'volunteers' => ['table' => 'volunteer_applications', 'title' => 'Volunteer applications', 'description' => 'Review applications and record follow-up decisions.', 'roles' => self::RECORD_ROLES, 'fields' => [
+            'volunteers' => ['table' => 'volunteer_applications', 'title' => 'Volunteer applications', 'description' => 'Review applications and record follow-up decisions.', 'roles' => self::VOLUNTEER_ROLES, 'fields' => [
                 ['name'=>'name','label'=>'Applicant name','type'=>'text','required'=>true], ['name'=>'email','label'=>'Email','type'=>'email','required'=>true], ['name'=>'phone','label'=>'Phone','type'=>'text'],
                 ['name'=>'area_of_interest','label'=>'Area of interest','type'=>'text','required'=>true], ['name'=>'availability','label'=>'Availability','type'=>'text'], ['name'=>'experience','label'=>'Experience / skills','type'=>'textarea'],
                 ['name'=>'motivation','label'=>'Motivation','type'=>'textarea','required'=>true], ['name'=>'status','label'=>'Review status','type'=>'select','options'=>['new'=>'New','reviewing'=>'Reviewing','approved'=>'Approved','declined'=>'Declined'],'required'=>true], ['name'=>'admin_notes','label'=>'Internal review notes','type'=>'textarea'],
