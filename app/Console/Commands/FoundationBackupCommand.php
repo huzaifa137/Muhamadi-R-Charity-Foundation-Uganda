@@ -80,11 +80,9 @@ class FoundationBackupCommand extends Command
         @chmod($zipPath, 0600);
 
         $keep = max(1, min(365, (int) $this->option('keep')));
-        $archives = collect(File::glob($directory.DIRECTORY_SEPARATOR.'foundation-backup-*.zip'))->sortDesc()->values();
+        $archives = collect(glob($directory.DIRECTORY_SEPARATOR.'foundation-backup-*.zip') ?: [])->sortDesc()->values();
         foreach ($archives->slice($keep) as $old) File::delete($old);
-        foreach (File::glob($directory.DIRECTORY_SEPARATOR.'database-*.sql.gz') as $oldSql) {
-            if (basename($oldSql) !== basename($sqlPath) && !in_array($oldSql, $archives->take($keep)->all(), true)) File::delete($oldSql);
-        }
+        foreach (glob($directory.DIRECTORY_SEPARATOR.'database-*.sql.gz') ?: [] as $oldSql) File::delete($oldSql);
 
         $this->info('Private backup created: '.$zipPath);
         return self::SUCCESS;
