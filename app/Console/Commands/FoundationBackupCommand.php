@@ -54,8 +54,12 @@ class FoundationBackupCommand extends Command
             return self::FAILURE;
         }
 
+        @chmod($sqlPath, 0600);
         if (!class_exists(ZipArchive::class)) {
             $this->warn('Database backup created, but ZIP extension is unavailable; uploaded files were not archived.');
+            $keep = max(1, min(365, (int) $this->option('keep')));
+            $sqlBackups = collect(glob($directory.DIRECTORY_SEPARATOR.'database-*.sql.gz') ?: [])->sortDesc()->values();
+            foreach ($sqlBackups->slice($keep) as $old) File::delete($old);
             $this->info($sqlPath);
             return self::SUCCESS;
         }
