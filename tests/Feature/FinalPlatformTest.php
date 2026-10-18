@@ -34,7 +34,7 @@ class FinalPlatformTest extends TestCase
     public function test_public_pages_keep_their_distinct_original_layouts(): void
     {
         $this->get(route('home'))->assertOk()->assertSee('class="hero"', false)->assertSee('Compassion in action. Hope in community.');
-        $this->get(route('programs'))->assertOk()->assertSee('class="program-card', false);
+        $this->get(route('programs'))->assertOk()->assertSee('class="grid-4"', false)->assertSee('Accountable action');
         $this->get(route('impact'))->assertOk()->assertSee('class="stats-band"', false);
         $this->get(route('stories'))->assertOk()->assertSee('class="editorial"', false);
         $this->get(route('get-involved'))->assertOk()->assertSee('id="donation-pledge"', false);
