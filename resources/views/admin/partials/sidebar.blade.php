@@ -49,7 +49,9 @@
             <div class="nav-label">Administration</div>
             <a class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">⚙ &nbsp; Foundation settings</a>
             <a class="nav-item {{ request()->routeIs('admin.activity-log.*') ? 'active' : '' }}" href="{{ route('admin.activity-log.index') }}">◷ &nbsp; Activity log</a>
-            <a class="nav-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff & permissions</a>
+            @if($sidebarRole === 'super_admin')
+                <a class="nav-item {{ request()->routeIs('admin.staff.*') ? 'active' : '' }}" href="{{ route('admin.staff.index') }}">♙ &nbsp; Staff &amp; permissions</a>
+            @endif
         @endif
 
         <div class="nav-label">Public website</div>
