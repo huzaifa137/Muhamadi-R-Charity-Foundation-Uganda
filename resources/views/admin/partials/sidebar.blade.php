@@ -6,7 +6,7 @@
     $canManageRecords = in_array($sidebarRole, ['super_admin', 'administrator', 'content_manager', 'finance_manager'], true);
     $canManageVolunteers = in_array($sidebarRole, ['super_admin', 'administrator', 'content_manager', 'finance_manager', 'volunteer_coordinator'], true);
     $activeOperation = request()->route('module');
-    $canViewReports = in_array($sidebarRole, ['super_admin', 'administrator', 'finance_manager', 'content_manager'], true);
+    $canViewReports = in_array($sidebarRole, ['super_admin', 'administrator', 'finance_manager', 'content_manager', 'volunteer_coordinator'], true);
     $canManageSettings = in_array($sidebarRole, ['super_admin', 'administrator'], true);
 @endphp
 <aside class="sidebar" id="sidebar">
