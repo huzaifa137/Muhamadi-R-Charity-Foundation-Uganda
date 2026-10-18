@@ -83,6 +83,16 @@ class FinalPlatformTest extends TestCase
         $this->withSession(['charity_admin_id' => $admin])->get(route('admin.activity-log.index'))->assertOk()->assertSee('settings.updated');
     }
 
+    public function test_volunteer_coordinator_can_access_only_volunteer_workflows_and_reports(): void
+    {
+        $admin = $this->admin('volunteer_coordinator');
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.operations.index', 'volunteers'))->assertOk();
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.operations.index', 'enquiries'))->assertForbidden();
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.index'))->assertOk();
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.export', ['report' => 'volunteers']))->assertOk();
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.export', ['report' => 'donations']))->assertForbidden();
+    }
+
     public function test_inactive_admin_cannot_access_reports_or_settings(): void
     {
         $admin = $this->admin('administrator', false);
