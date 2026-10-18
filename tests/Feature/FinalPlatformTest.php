@@ -80,7 +80,7 @@ class FinalPlatformTest extends TestCase
 
         $this->assertDatabaseHas('foundation_settings', ['key' => 'notification_email', 'value' => 'alerts@example.test']);
         $this->assertDatabaseHas('admin_activity_logs', ['admin_id' => $admin, 'action' => 'settings.updated']);
-        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.activity-log.index'))->assertOk()->assertSee('settings.updated');
+        $this->withSession(['charity_admin_id' => $admin])->get(route('admin.activity-log.index'))->assertOk()->assertSee('settings · updated');
     }
 
     public function test_volunteer_coordinator_can_access_only_volunteer_workflows_and_reports(): void
