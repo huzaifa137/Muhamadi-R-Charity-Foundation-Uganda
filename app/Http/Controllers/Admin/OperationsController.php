@@ -137,6 +137,14 @@ class OperationsController extends Controller
         }
         DB::table($config['table'])->where('id', $id)->update($data);
         $this->log($admin, $module, 'updated', $id, ['status' => $data['status'] ?? $data['payment_status'] ?? 'updated']);
+        if ($module === 'volunteers' && isset($data['status']) && $data['status'] !== $record->status) {
+            $updatedApplicant = DB::table('volunteer_applications')->where('id', $id)->first();
+            FoundationNotifier::send($updatedApplicant->email, 'Volunteer application status updated', 'Hello '.$updatedApplicant->name.'. Your volunteer application status is now: '.str_replace('_', ' ', $updatedApplicant->status).'. Please contact the foundation if you need more information.');
+        }
+        if ($module === 'enquiries' && ($data['status'] ?? null) === 'responded' && !empty($data['response_notes'])) {
+            $updatedEnquiry = DB::table('contact_enquiries')->where('id', $id)->first();
+            FoundationNotifier::send($updatedEnquiry->email, 'Update regarding your enquiry', 'Hello '.$updatedEnquiry->name.'. The foundation has added the following response to your enquiry: '.$updatedEnquiry->response_notes);
+        }
         if ($becamePaid) {
             $confirmed = DB::table('donations')->where('id', $id)->first();
             $body = 'Thank you. Payment has been confirmed by Muhamadi R Charity Foundation Uganda. Receipt number: '.$confirmed->receipt_number.'. Amount: '.$confirmed->currency.' '.number_format((float) $confirmed->amount, 2).'. Date: '.$confirmed->donation_date.'.';
