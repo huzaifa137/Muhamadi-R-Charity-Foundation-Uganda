@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
 use App\Http\Controllers\ProgramPageController;
 use App\Http\Controllers\AboutPageController;
+use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\PublicAuthController;
 use App\Http\Controllers\OperationsPublicController;
 use App\Http\Controllers\Admin\OperationsController;
@@ -15,17 +16,17 @@ use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('public.home', ['page' => \App\Models\SitePageContent::where('page_key', 'home')->firstOrFail()]))->name('home');
+Route::get('/', [PublicPageController::class, 'home'])->name('home');
 Route::get('/about', AboutPageController::class)->name('about');
 Route::get('/programs', ProgramPageController::class)->name('programs');
 Route::get('/impact', [OperationsPublicController::class, 'impact'])->name('impact');
 Route::get('/stories', [OperationsPublicController::class, 'stories'])->name('stories');
 Route::get('/stories/{slug}', [OperationsPublicController::class, 'story'])->where('slug', '[a-zA-Z0-9-]+')->name('stories.show');
 Route::get('/gallery', [OperationsPublicController::class, 'gallery'])->name('gallery');
-Route::get('/get-involved', fn () => view('public.get-involved', ['page' => \App\Models\SitePageContent::where('page_key', 'get-involved')->firstOrFail()]))->name('get-involved');
+Route::get('/get-involved', [PublicPageController::class, 'getInvolved'])->name('get-involved');
 Route::post('/donate', [OperationsPublicController::class, 'donate'])->middleware('throttle:5,1')->name('donate.submit');
 Route::post('/volunteer', [OperationsPublicController::class, 'volunteer'])->middleware('throttle:5,1')->name('volunteer.submit');
-Route::get('/contact', fn () => view('public.contact', ['page' => \App\Models\SitePageContent::where('page_key', 'contact')->firstOrFail()]))->name('contact');
+Route::get('/contact', [PublicPageController::class, 'contact'])->name('contact');
 Route::post('/contact', [OperationsPublicController::class, 'contact'])->middleware('throttle:5,1')->name('contact.submit');
 
 // Public-user authentication, separate from the admin route group.
