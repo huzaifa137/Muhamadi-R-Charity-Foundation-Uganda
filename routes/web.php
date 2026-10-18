@@ -23,17 +23,17 @@ Route::get('/route-probe', function () {
     return response('ROOT ROUTE TEST OK', 200);
 });
 
-Route::get('/', fn () => view('public.site-page', ['page' => \App\Models\SitePageContent::where('page_key', 'home')->firstOrFail(), 'records' => collect()]))->name('home');
+Route::get('/', fn () => view('public.home', ['page' => \App\Models\SitePageContent::where('page_key', 'home')->firstOrFail()]))->name('home');
 Route::get('/about', AboutPageController::class)->name('about');
 Route::get('/programs', ProgramPageController::class)->name('programs');
 Route::get('/impact', [OperationsPublicController::class, 'impact'])->name('impact');
 Route::get('/stories', [OperationsPublicController::class, 'stories'])->name('stories');
 Route::get('/stories/{slug}', [OperationsPublicController::class, 'story'])->where('slug', '[a-zA-Z0-9-]+')->name('stories.show');
 Route::get('/gallery', [OperationsPublicController::class, 'gallery'])->name('gallery');
-Route::get('/get-involved', fn () => view('public.site-page', ['page' => \App\Models\SitePageContent::where('page_key', 'get-involved')->firstOrFail(), 'records' => collect()]))->name('get-involved');
+Route::get('/get-involved', fn () => view('public.get-involved', ['page' => \App\Models\SitePageContent::where('page_key', 'get-involved')->firstOrFail()]))->name('get-involved');
 Route::post('/donate', [OperationsPublicController::class, 'donate'])->middleware('throttle:5,1')->name('donate.submit');
 Route::post('/volunteer', [OperationsPublicController::class, 'volunteer'])->middleware('throttle:5,1')->name('volunteer.submit');
-Route::get('/contact', fn () => view('public.site-page', ['page' => \App\Models\SitePageContent::where('page_key', 'contact')->firstOrFail(), 'records' => collect()]))->name('contact');
+Route::get('/contact', fn () => view('public.contact', ['page' => \App\Models\SitePageContent::where('page_key', 'contact')->firstOrFail()]))->name('contact');
 Route::post('/contact', [OperationsPublicController::class, 'contact'])->middleware('throttle:5,1')->name('contact.submit');
 
 // Public-user authentication, separate from the admin route group.
