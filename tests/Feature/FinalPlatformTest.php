@@ -102,7 +102,7 @@ class FinalPlatformTest extends TestCase
             ->assertOk()
             ->assertSee('reports-hero', false)
             ->assertSee('reports-stats', false)
-            ->assertSee('admin.partials.sidebar');
+            ->assertSee('Website pages');
 
         $this->withSession(['charity_admin_id' => $admin])
             ->get(route('admin.settings.edit'))
