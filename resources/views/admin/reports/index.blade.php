@@ -18,7 +18,7 @@
 </div>
 <div class="report-cards">
 @foreach([['donations','Donations & reconciliation','Includes payment status, receipt number, method, reference and donation date.'],['projects','Projects & impact','Project summaries, verified beneficiary counts, publication status and dates.'],['stories','Stories & news','Article titles, categories, authors and publication status.'],['volunteers','Volunteer applications','Applicant contact, interest area, availability and review status.'],['enquiries','Contact enquiries','Enquiry subject, sender, status and response date.']] as [$key,$title,$description])
-@if(($key === 'donations' && $canViewFinance) || (in_array($key, ['projects','stories'], true) && $canViewContent) || (in_array($key, ['volunteers','enquiries'], true) && in_array($admin->role, ['super_admin','administrator','content_manager','finance_manager'], true)))
+@if(($key === 'donations' && $canViewFinance) || (in_array($key, ['projects','stories'], true) && $canViewContent) || (in_array($key, ['volunteers','enquiries'], true) && (($key === 'volunteers' && $admin->role === 'volunteer_coordinator') || in_array($admin->role, ['super_admin','administrator','content_manager','finance_manager'], true))))
 <div class="card report-card"><h2>{{ $title }}</h2><p>{{ $description }}</p><div class="report-actions"><a class="btn btn-primary" href="{{ route('admin.reports.export', array_merge(['report' => $key], array_filter(['from' => $from, 'to' => $to]))) }}">Export CSV</a><button class="btn btn-outline" type="button" onclick="window.print()">Print / PDF</button></div></div>
 @endif
 @endforeach
