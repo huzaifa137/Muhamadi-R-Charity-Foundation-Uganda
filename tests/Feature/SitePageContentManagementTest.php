@@ -50,7 +50,13 @@ class SitePageContentManagementTest extends TestCase
         $admin = $this->admin();
         $this->withSession(['charity_admin_id' => $admin])
             ->get(route('admin.site-pages.edit', 'home'))
-            ->assertOk()->assertSee('Edit Home page')->assertSee('Section information');
+            ->assertOk()
+            ->assertSee('Edit Home page')
+            ->assertSee('spe-hero', false)
+            ->assertSee('spe-overview', false)
+            ->assertSee('spe-layout', false)
+            ->assertSee('Publishing checklist')
+            ->assertSee('Section information');
 
         $page = SitePageContent::where('page_key', 'home')->firstOrFail();
         $sections = $page->sections;
