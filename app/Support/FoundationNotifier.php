@@ -33,7 +33,7 @@ class FoundationNotifier
 
     public static function notifyTeam(string $subject, string $body): bool
     {
-        $recipient = env('FOUNDATION_NOTIFICATION_EMAIL');
+        $recipient = config('foundation.notification_email');
         try {
             if (DB::getSchemaBuilder()->hasTable('foundation_settings')) {
                 $configured = DB::table('foundation_settings')->where('key', 'notification_email')->value('value');
