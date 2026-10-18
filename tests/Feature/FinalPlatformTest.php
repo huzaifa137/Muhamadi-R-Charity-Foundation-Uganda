@@ -93,6 +93,32 @@ class FinalPlatformTest extends TestCase
         $this->withSession(['charity_admin_id' => $admin])->get(route('admin.reports.export', ['report' => 'donations']))->assertForbidden();
     }
 
+    public function test_reports_settings_and_activity_log_share_the_polished_admin_workspace(): void
+    {
+        $admin = $this->admin('administrator');
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.reports.index'))
+            ->assertOk()
+            ->assertSee('reports-hero', false)
+            ->assertSee('reports-stats', false)
+            ->assertSee('admin.partials.sidebar');
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.settings.edit'))
+            ->assertOk()
+            ->assertSee('settings-summary', false)
+            ->assertSee('settings-layout', false)
+            ->assertSee('View activity log');
+
+        $this->withSession(['charity_admin_id' => $admin])
+            ->get(route('admin.activity-log.index'))
+            ->assertOk()
+            ->assertSee('audit-hero', false)
+            ->assertSee('audit-stats', false)
+            ->assertSee('Privacy reminder');
+    }
+
     public function test_inactive_admin_cannot_access_reports_or_settings(): void
     {
         $admin = $this->admin('administrator', false);
