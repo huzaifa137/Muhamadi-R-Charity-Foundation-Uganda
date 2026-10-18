@@ -52,6 +52,8 @@ class ReportsController extends Controller
         if ($from) $donations->whereDate('donation_date', '>=', $from);
         if ($to) $donations->whereDate('donation_date', '<=', $to);
 
+        $canViewFinance = in_array($admin->role, ['super_admin', 'administrator', 'finance_manager'], true);
+        $canViewContent = in_array($admin->role, ['super_admin', 'administrator', 'content_manager'], true);
         $summary = [
             'donation_count' => (clone $donations)->count(),
             'paid_total' => (clone $donations)->where('payment_status', 'paid')->sum('amount'),
@@ -62,13 +64,20 @@ class ReportsController extends Controller
             'open_enquiries' => DB::table('contact_enquiries')->whereIn('status', ['new','in_progress'])->count(),
         ];
 
-        $recentDonations = (clone $donations)->orderByDesc('donation_date')->limit(10)->get();
-        return view('admin.reports.index', compact('admin', 'summary', 'recentDonations', 'from', 'to'));
+        $recentDonations = $canViewFinance ? (clone $donations)->orderByDesc('donation_date')->limit(10)->get() : collect();
+        return view('admin.reports.index', compact('admin', 'summary', 'recentDonations', 'from', 'to', 'canViewFinance', 'canViewContent'));
     }
 
     public function export(Request $request, string $report): StreamedResponse
     {
-        $this->admin();
+        $admin = $this->admin();
+        $allowedRoles = match ($report) {
+            'donations' => ['super_admin', 'administrator', 'finance_manager'],
+            'projects', 'stories' => ['super_admin', 'administrator', 'content_manager'],
+            'volunteers', 'enquiries' => ['super_admin', 'administrator', 'content_manager', 'finance_manager'],
+            default => [],
+        };
+        abort_unless(in_array($admin->role, $allowedRoles, true), 403, 'Your role cannot export this report.');
         [$from, $to] = $this->range($request);
         [$query, $definition] = $this->query($report, $from, $to);
         $filename = 'muhamadi-foundation-'.$report.'-'.now()->format('Ymd-His').'.csv';
