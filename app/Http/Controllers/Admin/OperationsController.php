@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\Support\FoundationNotifier;
 use Illuminate\View\View;
 
 class OperationsController extends Controller
@@ -125,6 +126,7 @@ class OperationsController extends Controller
         if (in_array($module, ['impact', 'stories'], true)) $request->merge(['slug' => Str::slug((string) ($request->input('slug') ?: $request->input('title')))]);
         $data = $this->validated($request, $config, $id);
         $data = $this->prepare($request, $config, $data, $record);
+        $becamePaid = $module === 'donations' && $record->payment_status !== 'paid' && ($data['payment_status'] ?? $record->payment_status) === 'paid';
         $data['updated_at'] = now();
         if ($module === 'donations' && ($data['payment_status'] ?? $record->payment_status) === 'paid' && empty($record->receipt_number)) {
             $data['receipt_number'] = 'MRF-'.now()->format('Ymd').'-'.str_pad((string) $id, 6, '0', STR_PAD_LEFT);
@@ -134,6 +136,12 @@ class OperationsController extends Controller
         }
         DB::table($config['table'])->where('id', $id)->update($data);
         $this->log($admin, $module, 'updated', $id, ['status' => $data['status'] ?? $data['payment_status'] ?? 'updated']);
+        if ($becamePaid) {
+            $confirmed = DB::table('donations')->where('id', $id)->first();
+            $body = 'Thank you. Payment has been confirmed by Muhamadi R Charity Foundation Uganda. Receipt number: '.$confirmed->receipt_number.'. Amount: '.$confirmed->currency.' '.number_format((float) $confirmed->amount, 2).'. Date: '.$confirmed->donation_date.'.';
+            FoundationNotifier::send($confirmed->email, 'Donation payment confirmed — receipt '.$confirmed->receipt_number, $body);
+            FoundationNotifier::notifyTeam('Donation payment confirmed', 'Donation #'.$confirmed->id.' was marked paid by an administrator. Receipt number: '.$confirmed->receipt_number.'.');
+        }
         return redirect()->route('admin.operations.index', $module)->with('status', $config['title'].' record updated.');
     }
 
