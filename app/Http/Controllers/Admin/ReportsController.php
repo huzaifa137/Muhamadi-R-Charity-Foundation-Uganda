@@ -14,7 +14,7 @@ class ReportsController extends Controller
     {
         $admin = DB::table('admins')->where('id', session('charity_admin_id'))->where('is_active', true)->first();
         abort_unless($admin, 403, 'An active administrator sign-in is required.');
-        abort_unless(in_array($admin->role, ['super_admin', 'administrator', 'finance_manager', 'content_manager'], true), 403);
+        abort_unless(in_array($admin->role, ['super_admin', 'administrator', 'finance_manager', 'content_manager', 'volunteer_coordinator'], true), 403);
         return $admin;
     }
 
@@ -74,7 +74,8 @@ class ReportsController extends Controller
         $allowedRoles = match ($report) {
             'donations' => ['super_admin', 'administrator', 'finance_manager'],
             'projects', 'stories' => ['super_admin', 'administrator', 'content_manager'],
-            'volunteers', 'enquiries' => ['super_admin', 'administrator', 'content_manager', 'finance_manager'],
+            'volunteers' => ['super_admin', 'administrator', 'content_manager', 'finance_manager', 'volunteer_coordinator'],
+            'enquiries' => ['super_admin', 'administrator', 'content_manager', 'finance_manager'],
             default => [],
         };
         abort_unless(in_array($admin->role, $allowedRoles, true), 403, 'Your role cannot export this report.');
