@@ -169,7 +169,9 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    // Secure (HTTPS-only) cookies are switched on automatically when APP_URL is https://,
+    // unless SESSION_SECURE_COOKIE is set explicitly.
+    'secure' => env('SESSION_SECURE_COOKIE', str_starts_with((string) env('APP_URL', ''), 'https://')),
 
     /*
     |--------------------------------------------------------------------------

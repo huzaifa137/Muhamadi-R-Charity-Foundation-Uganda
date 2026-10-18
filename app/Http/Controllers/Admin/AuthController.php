@@ -11,8 +11,23 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
+        // An administrator who is already signed in has no need for the sign-in page.
+        if ($request->session()->has('charity_admin_id')) {
+            $isActive = DB::table('admins')
+                ->where('id', $request->session()->get('charity_admin_id'))
+                ->where('is_active', true)
+                ->exists();
+
+            if ($isActive) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            // Stale or deactivated session: clear it and show the form.
+            $request->session()->forget(['charity_admin_id', 'charity_admin_name']);
+        }
+
         return view('admin.auth.login');
     }
 
@@ -39,6 +54,16 @@ class AuthController extends Controller
         $request->session()->put('charity_admin_id', $admin->id);
         $request->session()->put('charity_admin_name', $admin->name);
         DB::table('admins')->where('id', $admin->id)->update(['last_login_at' => now(), 'updated_at' => now()]);
+        DB::table('admin_activity_logs')->insert([
+            'admin_id' => $admin->id,
+            'action' => 'admin.login',
+            'subject_type' => 'admin',
+            'subject_id' => $admin->id,
+            'details' => json_encode(['role' => $admin->role]),
+            'ip_address' => $request->ip(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         return redirect()->intended(route('admin.dashboard'));
     }

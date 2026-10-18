@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([ProgramSeeder::class, AboutPageContentSeeder::class, SitePageContentSeeder::class]);
+
         // User::factory(10)->create();
 
         User::factory()->create([
