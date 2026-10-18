@@ -11,6 +11,8 @@ use App\Http\Controllers\PublicAuthController;
 use App\Http\Controllers\OperationsPublicController;
 use App\Http\Controllers\Admin\OperationsController;
 use App\Http\Controllers\Admin\SitePageContentController;
+use App\Http\Controllers\Admin\ReportsController;
+use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/test-route', function () {
