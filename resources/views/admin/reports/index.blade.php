@@ -9,9 +9,12 @@
 @if($canViewFinance)
 <div class="card report-stat"><span>Donation records</span><strong>{{ number_format($summary['donation_count']) }}</strong></div>
 <div class="card report-stat"><span>Confirmed donations (UGX)</span><strong>{{ number_format((float)$summary['paid_total'], 0) }}</strong></div>
-<div class="card report-stat"><span>Pending pledges (UGX)</span><strong>{{ number_format((float)$summary['pending_total'], 0) }}</strong>@endif
-</div>
+<div class="card report-stat"><span>Pending pledges (UGX)</span><strong>{{ number_format((float)$summary['pending_total'], 0) }}</strong></div>
+@endif
 <div class="card report-stat"><span>Open enquiries</span><strong>{{ number_format($summary['open_enquiries']) }}</strong></div>
+<div class="card report-stat"><span>Published projects</span><strong>{{ number_format($summary['published_projects']) }}</strong></div>
+<div class="card report-stat"><span>Published stories</span><strong>{{ number_format($summary['published_stories']) }}</strong></div>
+<div class="card report-stat"><span>Volunteer applications to review</span><strong>{{ number_format($summary['open_volunteers']) }}</strong></div>
 </div>
 <div class="report-cards">
 @foreach([['donations','Donations & reconciliation','Includes payment status, receipt number, method, reference and donation date.'],['projects','Projects & impact','Project summaries, verified beneficiary counts, publication status and dates.'],['stories','Stories & news','Article titles, categories, authors and publication status.'],['volunteers','Volunteer applications','Applicant contact, interest area, availability and review status.'],['enquiries','Contact enquiries','Enquiry subject, sender, status and response date.']] as [$key,$title,$description])
