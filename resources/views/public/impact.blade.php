@@ -7,9 +7,8 @@
 
 <section class="page-hero">
 <div class="container"><span class="eyebrow">Our impact</span>
-<h1 class="h1">Make the impact visible. Keep the evidence honest.</h1>
-<p class="lead">This page is designed for verified figures, project records and community stories. No statistics
-          are presented as fact until the organization supplies and approves them.</p>
+<h1 class="h1">{{ $page->hero_heading ?: 'Make the impact visible. Keep the evidence honest.' }}</h1>
+<p class="lead">{{ $page->hero_intro ?: 'This page is designed for verified figures, project records and community stories. No statistics are presented as fact until the organization supplies and approves them.' }}</p>
 </div>
 </section>
 <section class="stats-band">
@@ -146,5 +145,7 @@
 </div>
 </div>
 </section>
+
+@include('public.page-content-sections')
 
 @endsection
