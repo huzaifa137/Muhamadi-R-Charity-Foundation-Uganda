@@ -29,7 +29,7 @@ The optional scripts/deploy-production.sh automates the backup and common Artisa
 
 Run php artisan foundation:backup on the production host. It writes archives to storage/app/private/backups, outside the public web root. The command requires mysqldump and a MySQL/MariaDB connection; uploaded files are included when PHP's ZIP extension is available. Keep an independent off-server copy (encrypted and access-restricted) because a backup on the same host is not disaster recovery.
 
-Suggested schedule: daily database/file backup, weekly restore verification in a separate staging environment, and retention aligned with the foundation's data-protection obligations. Monitor command exit codes and free disk space. Do not treat a successful archive creation as proof of recoverability until a restore test has succeeded.
+Suggested schedule: daily database/file backup, weekly restore verification in a separate staging environment, and retention aligned with the foundation's data-protection obligations. To activate the Laravel daily schedule, configure the host cron to run php artisan schedule:run every minute from the project root. The scheduler runs foundation:backup at 02:00 only when APP_ENV is production. Monitor command exit codes and free disk space. Do not treat a successful archive creation as proof of recoverability until a restore test has succeeded.
 
 ## Recovery outline
 
