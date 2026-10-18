@@ -38,7 +38,7 @@ class FinalPlatformTest extends TestCase
         $this->get(route('impact'))->assertOk()->assertSee('class="stats-band"', false);
         $this->get(route('stories'))->assertOk()->assertSee('class="editorial"', false);
         $this->get(route('get-involved'))->assertOk()->assertSee('id="donation-pledge"', false);
-        $this->get(route('contact'))->assertOk()->assertSee('class="contact-panel"', false);
+        $this->get(route('contact'))->assertOk()->assertSee('class="contact-panel reveal', false);
     }
 
     public function test_reports_are_protected_and_csv_export_uses_real_records(): void
