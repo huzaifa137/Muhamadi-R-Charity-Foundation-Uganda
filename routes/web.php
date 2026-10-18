@@ -15,14 +15,6 @@ use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/admin/test-route', function () {
-    return response('ADMIN ROUTE TEST OK', 200);
-});
-
-Route::get('/route-probe', function () {
-    return response('ROOT ROUTE TEST OK', 200);
-});
-
 Route::get('/', fn () => view('public.home', ['page' => \App\Models\SitePageContent::where('page_key', 'home')->firstOrFail()]))->name('home');
 Route::get('/about', AboutPageController::class)->name('about');
 Route::get('/programs', ProgramPageController::class)->name('programs');
