@@ -16,7 +16,7 @@
         @error('email') <span class="auth-field-error">{{ $message }}</span> @enderror
         <label for="password">Password</label>
         <input id="password" name="password" type="password" autocomplete="new-password" required>
-        <span class="auth-hint">Use at least 8 characters.</span>
+        <span class="auth-hint">Use at least 4 characters.</span>
         @error('password') <span class="auth-field-error">{{ $message }}</span> @enderror
         <label for="password_confirmation">Confirm password</label>
         <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required>

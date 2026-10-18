@@ -83,13 +83,94 @@ class AdminStaffPermissionsTest extends TestCase
                 'name' => 'Weak Password User',
                 'email' => 'weak@example.test',
                 'role' => 'content_manager',
-                'password' => 'short',
-                'password_confirmation' => 'short',
+                'password' => 'abc',
+                'password_confirmation' => 'abc',
             ])
             ->assertRedirect(route('admin.staff.index'))
             ->assertSessionHasErrors('password');
 
         $this->assertDatabaseMissing('admins', ['email' => 'weak@example.test']);
+    }
+
+    public function test_staff_creation_accepts_a_simple_four_character_password(): void
+    {
+        $adminId = $this->createAdmin();
+
+        $this->withSession(['charity_admin_id' => $adminId])
+            ->from(route('admin.staff.index'))
+            ->post(route('admin.staff.store'), [
+                'name' => 'Simple Password User',
+                'email' => 'simple@example.test',
+                'role' => 'content_manager',
+                'password' => '1234',
+                'password_confirmation' => '1234',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $staff = DB::table('admins')->where('email', 'simple@example.test')->first();
+        $this->assertNotNull($staff);
+        $this->assertTrue(Hash::check('1234', $staff->password));
+    }
+
+    public function test_signed_in_admin_is_redirected_away_from_the_sign_in_page(): void
+    {
+        $adminId = $this->createAdmin();
+
+        $this->withSession(['charity_admin_id' => $adminId])
+            ->get(route('admin.login'))
+            ->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_deactivated_admin_session_still_sees_the_sign_in_page(): void
+    {
+        $adminId = $this->createAdmin('super_admin', false);
+
+        $this->withSession(['charity_admin_id' => $adminId])
+            ->get(route('admin.login'))
+            ->assertOk();
+    }
+
+    public function test_signed_out_visitor_sees_the_admin_sign_in_page(): void
+    {
+        $this->get(route('admin.login'))->assertOk();
+    }
+
+    public function test_signed_in_public_user_is_redirected_from_login_and_register(): void
+    {
+        $user = \App\Models\User::create([
+            'name' => 'Public Member',
+            'email' => 'member@example.test',
+            'password' => '1234',
+        ]);
+
+        $this->actingAs($user)->get(route('login'))->assertRedirect(route('dashboard'));
+        $this->actingAs($user)->get(route('register'))->assertRedirect(route('dashboard'));
+    }
+
+    public function test_public_registration_accepts_a_four_character_password(): void
+    {
+        $this->post(route('register.submit'), [
+            'name' => 'New Member',
+            'email' => 'new@example.test',
+            'password' => 'abcd',
+            'password_confirmation' => 'abcd',
+        ])->assertRedirect(route('dashboard'));
+
+        $this->assertDatabaseHas('users', ['email' => 'new@example.test']);
+    }
+
+    public function test_site_pages_list_shows_edit_page_and_preview_as_buttons(): void
+    {
+        $this->seed(\Database\Seeders\SitePageContentSeeder::class);
+        $adminId = $this->createAdmin();
+
+        $this->withSession(['charity_admin_id' => $adminId])
+            ->get(route('admin.site-pages.index'))
+            ->assertOk()
+            ->assertSee('class="btn btn-primary btn-sm"', false)
+            ->assertSee('class="btn btn-outline btn-sm"', false)
+            ->assertSee('Edit page')
+            ->assertSee('Preview');
     }
 
     public function test_super_admin_cannot_demote_or_deactivate_their_own_account(): void
