@@ -25,7 +25,7 @@
 <a data-page-link="home" href="{{ route('home') }}">Home</a><a data-page-link="about" href="{{ route('about') }}">About Us</a><a data-page-link="programs" href="{{ route('programs') }}">What We Do</a><a data-page-link="impact" href="{{ route('impact') }}">Our
           Impact</a><a data-page-link="stories" href="{{ route('stories') }}">Stories</a><a data-page-link="gallery" href="{{ route('gallery') }}">Gallery</a><a data-page-link="get-involved" href="{{ route('get-involved') }}">Get
           Involved</a><a data-page-link="contact" href="{{ route('contact') }}">Contact</a>
-<a class="btn btn-primary nav-cta" href="{{ route('get-involved') }}" style="color: #fff;">Support Our Work <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<a class="btn btn-primary nav-cta" href="{{ route('donate') }}" style="color: #fff;">Donate Now <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M5 12h14"></path>
 <path d="m13 6 6 6-6 6"></path>
 </svg></a>

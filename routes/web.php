@@ -25,6 +25,7 @@ Route::get('/stories', [OperationsPublicController::class, 'stories'])->name('st
 Route::get('/stories/{slug}', [OperationsPublicController::class, 'story'])->where('slug', '[a-zA-Z0-9-]+')->name('stories.show');
 Route::get('/gallery', [OperationsPublicController::class, 'gallery'])->name('gallery');
 Route::get('/get-involved', [PublicPageController::class, 'getInvolved'])->name('get-involved');
+Route::view('/donate', 'public.donate')->name('donate');
 Route::post('/donate', [OperationsPublicController::class, 'donate'])->middleware('throttle:5,1')->name('donate.submit');
 Route::post('/volunteer', [OperationsPublicController::class, 'volunteer'])->middleware('throttle:5,1')->name('volunteer.submit');
 Route::get('/contact', [PublicPageController::class, 'contact'])->name('contact');

@@ -17,28 +17,10 @@
 <div class="container grid-2">
 <div class="reveal"><span class="eyebrow">Donate / support</span>
 <h2 class="h2">Make practical support possible.</h2>
-<p class="lead">Your support can help the foundation respond to identified community needs. Official donation
-            channels should be inserted here once confirmed.</p>
+<p class="lead">Your support can help the foundation respond to identified community needs. Give securely online in a few
+            minutes, or record a pledge below if you would like to arrange your gift another way.</p>
 </div>
-<div class="form-card reveal delay-1">
-<h3>Donation details — editable</h3>
-<div class="check-list">
-<li><svg class="" fill="none" stroke="currentColor" stroke-width="2.3" viewbox="0 0 24 24">
-<path d="m5 12 4 4L19 6"></path>
-</svg> <span><strong>Mobile Money:</strong> [ADD VERIFIED NUMBER / ACCOUNT NAME]</span></li>
-<li><svg class="" fill="none" stroke="currentColor" stroke-width="2.3" viewbox="0 0 24 24">
-<path d="m5 12 4 4L19 6"></path>
-</svg> <span><strong>Bank:</strong> [ADD VERIFIED BANK DETAILS]</span></li>
-<li><svg class="" fill="none" stroke="currentColor" stroke-width="2.3" viewbox="0 0 24 24">
-<path d="m5 12 4 4L19 6"></path>
-</svg> <span><strong>International giving:</strong> [ADD VERIFIED METHOD]</span></li>
-<li><svg class="" fill="none" stroke="currentColor" stroke-width="2.3" viewbox="0 0 24 24">
-<path d="m5 12 4 4L19 6"></path>
-</svg> <span><strong>Donation instructions:</strong> [ADD APPROVED INSTRUCTIONS]</span></li>
-</div>
-<p class="form-note" style="margin-top:20px">To replace the bracketed text before publishing donation
-            instructions.</p>
-</div>
+<div class="reveal delay-1">@include('components.shared.flutterwave-donate-card')</div>
 </div>
 </section>
 <section class="section bg-cream" id="volunteer">

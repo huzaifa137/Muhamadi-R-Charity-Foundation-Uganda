@@ -21,7 +21,7 @@
 <div>
 <h4>Get involved</h4>
 <div class="footer-links">
-<a href="{{ route('get-involved') }}"#donate>Donate / Support</a><a href="{{ route('get-involved') }}"#volunteer>Volunteer</a><a href="{{ route('get-involved') }}"#partner>Partner With Us</a><a href="{{ route('contact') }}">Contact the Foundation</a>
+<a href="{{ route('donate') }}">Donate / Support</a><a href="{{ route('get-involved') }}"#volunteer>Volunteer</a><a href="{{ route('get-involved') }}"#partner>Partner With Us</a><a href="{{ route('contact') }}">Contact the Foundation</a>
 </div>
 </div>
 <div>

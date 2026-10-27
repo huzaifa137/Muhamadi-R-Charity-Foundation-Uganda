@@ -28,6 +28,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // Hosted Flutterwave payment link used by the public "Donate" button.
+    // The link is public (donors open it), so a default is provided; override per environment in .env.
+    'flutterwave' => [
+        'pay_link' => env('FLUTTERWAVE_PAY_LINK', 'https://flutterwave.com/pay/qrslug-993880-0zxql4pisalb'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
