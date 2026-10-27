@@ -36,7 +36,7 @@ class AboutPageContentManagementTest extends TestCase
 
     public function test_about_editor_rejects_requests_without_admin_session(): void
     {
-        $this->get(route('admin.about.edit'))->assertForbidden();
+        $this->get(route('admin.about.edit'))->assertRedirect(route('admin.login'));
     }
 
     public function test_finance_role_cannot_edit_about_page(): void

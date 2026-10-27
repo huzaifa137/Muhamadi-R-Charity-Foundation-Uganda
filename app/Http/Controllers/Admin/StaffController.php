@@ -89,7 +89,7 @@ class StaffController extends Controller
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:255', 'unique:admins,email'],
             'role' => ['required', Rule::in(array_keys(self::ROLES))],
-            'password' => ['required', 'string', 'min:12', 'confirmed', 'max:255'],
+            'password' => ['required', 'string', 'min:4', 'confirmed', 'max:255'],
         ]);
 
         $id = DB::table('admins')->insertGetId([
@@ -123,7 +123,7 @@ class StaffController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('admins', 'email')->ignore($id)],
             'role' => ['required', Rule::in(array_keys(self::ROLES))],
             'is_active' => ['required', 'boolean'],
-            'password' => ['nullable', 'string', 'min:12', 'confirmed', 'max:255'],
+            'password' => ['nullable', 'string', 'min:4', 'confirmed', 'max:255'],
         ]);
 
         $willBeActive = (bool) $data['is_active'];

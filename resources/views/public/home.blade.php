@@ -10,8 +10,8 @@
 <div class="hero-overlay"></div>
 <div class="container hero-content">
 <span class="eyebrow">Muhamadi R Charity Foundation Uganda</span>
-<h1 class="display">Compassion in action. <span style="color:#a9e8ae">Hope in community.</span></h1>
-<p class="lead">We are committed to community-centered support that protects dignity, responds to practical needs and helps people move forward with hope.</p>
+<h1 class="display">{{ $page->hero_heading ?: 'Compassion in action. Hope in community.' }}</h1>
+<p class="lead">{{ $page->hero_intro ?: 'We are committed to community-centered support that protects dignity, responds to practical needs and helps people move forward with hope.' }}</p>
 <div class="hero-actions">
 <a class="btn btn-primary" href="{{ route('get-involved') }}">Support Our Work <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a>
 <a class="btn btn-outline" href="{{ route('programs') }}" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:#fff">Explore Our Work <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a>
@@ -186,8 +186,10 @@
 </section>
 <section class="section-sm">
 <div class="container">
-<div class="cta-panel reveal"><div class="cta-inner"><div><span class="eyebrow" style="color:#b8efbd">Take the next step</span><h2 class="h2" style="color:#fff;margin-bottom:8px">Together, practical support can become lasting hope.</h2><p>Use the contact page to start a conversation. Donation details, official addresses and verified organizational information can be added as they become available.</p></div><div class="cta-actions"><a class="btn btn-primary" href="{{ route('contact') }}">Contact Us <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a><a class="btn btn-outline" href="{{ route('get-involved') }}">Get Involved</a></div></div></div>
+<div class="cta-panel reveal"><div class="cta-inner"><div><span class="eyebrow" style="color:#b8efbd">Take the next step</span><h2 class="h2" style="color:#fff;margin-bottom:8px">Together, practical support can become lasting hope.</h2><p>Give securely online, or use the contact page to start a conversation about volunteering, partnership or support.</p></div><div class="cta-actions"><a class="btn btn-primary" href="{{ route('donate') }}">Donate Now <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a><a class="btn btn-outline" href="{{ route('contact') }}">Contact Us <svg class="" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a><a class="btn btn-outline" href="{{ route('get-involved') }}">Get Involved</a></div></div></div>
 </div>
 </section>
+
+@include('public.page-content-sections')
 
 @endsection

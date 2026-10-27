@@ -29,7 +29,7 @@ class ProgramManagementTest extends TestCase
 
     public function test_program_management_rejects_requests_without_an_admin_session(): void
     {
-        $this->get(route('admin.programs.index'))->assertForbidden();
+        $this->get(route('admin.programs.index'))->assertRedirect(route('admin.login'));
     }
 
     public function test_finance_role_cannot_manage_program_content(): void

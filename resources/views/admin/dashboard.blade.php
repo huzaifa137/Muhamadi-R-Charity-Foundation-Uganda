@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Dashboard Â· Admin | Muhamadi R Charity Foundation Uganda</title>
+<title>Dashboard · Admin | Muhamadi R Charity Foundation Uganda</title>
 <link rel="icon" href="{{ asset('assets/images/favicon.webp') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
 <div class="main">
   <header class="topbar">
     <button class="icon-btn menu-btn" data-nav-toggle aria-label="Open menu"><svg class="i"><use href="#i-menu"/></svg></button>
-    <label class="search"><svg class="i i-sm"><use href="#i-search"/></svg><input type="search" placeholder="Search donors, stories, messagesâ€¦" aria-label="Search"><kbd>Ctrl K</kbd></label>
+    <label class="search"><svg class="i i-sm"><use href="#i-search"/></svg><input type="search" placeholder="Search donors, stories, messages…" aria-label="Search"><kbd>Ctrl K</kbd></label>
     <div class="top-actions">
       <a class="btn btn-outline btn-sm" href="../index.html" target="_blank" rel="noopener"><svg class="i i-sm"><use href="#i-external"/></svg><span class="btn-label-hide">View site</span></a>
       <button class="btn btn-primary btn-sm" data-publish><svg class="i i-sm"><use href="#i-cloud"/></svg><span class="btn-label-hide">Publish changes</span></button>
@@ -30,7 +30,7 @@
         <button class="icon-btn" data-dd aria-label="Notifications"><svg class="i"><use href="#i-bell"/></svg><span class="dot"></span></button>
         <div class="menu">
           <div class="menu-head">Notifications <a class="link" href="messages.html">View all</a></div>
-          <div class="notif"><span class="nic"><svg class="i i-sm"><use href="#i-wallet"/></svg></span><div><b>New donation Â· UGX 250,000</b><span>Aisha Nakato Â· 2h ago</span></div></div>
+          <div class="notif"><span class="nic"><svg class="i i-sm"><use href="#i-wallet"/></svg></span><div><b>New donation · UGX 250,000</b><span>Aisha Nakato · 2h ago</span></div></div>
           <div class="notif"><span class="nic"><svg class="i i-sm"><use href="#i-mail"/></svg></span><div><b>3 unread messages</b><span>Partnership, volunteer, donation</span></div></div>
           <div class="notif"><span class="nic"><svg class="i i-sm"><use href="#i-user"/></svg></span><div><b>2 volunteer applications</b><span>Awaiting screening</span></div></div>
           <div class="notif"><span class="nic"><svg class="i i-sm"><use href="#i-alert"/></svg></span><div><b>6 content placeholders</b><span>Contact &amp; donation details need verifying</span></div></div>
@@ -50,7 +50,7 @@
   <main class="content">
 
 <div class="page-head">
-  <div><div class="crumb">Overview</div><h1>Welcome back, Muhamadi ðŸ‘‹</h1><p>Here is what is happening across the foundation's website, donations and community engagement today.</p></div>
+  <div><div class="crumb">Overview</div><h1>Welcome back, Muhamadi 👋</h1><p>Here is what is happening across the foundation's website, donations and community engagement today.</p></div>
   <div class="page-actions">
     <select class="select-sm" aria-label="Date range"><option>Last 12 months</option><option>Last 30 days</option><option>This quarter</option></select>
     <button class="btn btn-outline btn-sm" onclick="UI.toast('Report export started (demo)')"><svg class="i i-sm"><use href="#i-download"/></svg>Export report</button>
@@ -88,7 +88,7 @@
 <!-- Traffic + campaigns -->
 <div class="g g-21 mb-3">
   <div class="card">
-    <div class="card-head"><div><h3>Website traffic</h3><p>Visitors and page views Â· last 30 days</p></div><a class="link" href="analytics.html">Full analytics <svg class="i i-sm"><use href="#i-chev-right"/></svg></a></div>
+    <div class="card-head"><div><h3>Website traffic</h3><p>Visitors and page views · last 30 days</p></div><a class="link" href="analytics.html">Full analytics <svg class="i i-sm"><use href="#i-chev-right"/></svg></a></div>
     <div class="card-body"><div id="ch-traffic"></div><div class="legend-inline mt-1"><span><i style="background:#3bb64b"></i>Visitors</span><span><i style="background:#cfe6d2"></i>Page views</span></div></div>
   </div>
   <div class="card">
@@ -129,7 +129,7 @@
       <a class="todo" href="messages.html"><span class="kpi-ic amber" style="width:38px;height:38px;border-radius:11px"><svg class="i"><use href="#i-mail"/></svg></span><div><b class="small">Reply to messages</b><div class="xs muted">Partnership, volunteer, donation</div></div><span class="n">3</span></a>
       <a class="todo" href="volunteers.html"><span class="kpi-ic" style="width:38px;height:38px;border-radius:11px"><svg class="i"><use href="#i-user"/></svg></span><div><b class="small">Screen volunteer applications</b><div class="xs muted">New this week</div></div><span class="n">2</span></a>
       <a class="todo" href="donations.html"><span class="kpi-ic blue" style="width:38px;height:38px;border-radius:11px"><svg class="i"><use href="#i-wallet"/></svg></span><div><b class="small">Confirm pending donations</b><div class="xs muted">Mobile Money awaiting match</div></div><span class="n">1</span></a>
-      <a class="todo" href="{{ route('stories') }}"><span class="kpi-ic red" style="width:38px;height:38px;border-radius:11px"><svg class="i"><use href="#i-file"/></svg></span><div><b class="small">Finish draft stories</b><div class="xs muted">1 draft Â· 1 scheduled</div></div><span class="n">2</span></a>
+      <a class="todo" href="{{ route('stories') }}"><span class="kpi-ic red" style="width:38px;height:38px;border-radius:11px"><svg class="i"><use href="#i-file"/></svg></span><div><b class="small">Finish draft stories</b><div class="xs muted">1 draft · 1 scheduled</div></div><span class="n">2</span></a>
       <a class="todo" href="partners.html"><span class="kpi-ic" style="width:38px;height:38px;border-radius:11px"><svg class="i"><use href="#i-briefcase"/></svg></span><div><b class="small">Follow up partnership leads</b><div class="xs muted">In discussion</div></div><span class="n">2</span></a>
     </div>
   </div>
@@ -167,17 +167,17 @@
   Charts.donut('#ch-purpose', { items: D.purposes.map((p,i)=>({label:p.label,value:p.value})), center: { value: '49.6M', label: 'UGX total' }, tipFormat: v => UI.ugx(v) });
 
   const targets = [['People reached', 1000, 1000, '1000+', C.deep], ['Families supported', 400, 400, '400+', C.green], ['Communities served', 500, 500, '500+', C.lime], ['Projects / initiatives', 10, 10, '10+', C.amber]];
-  document.getElementById('impact-rings').innerHTML = targets.map((t,i)=>`<div class="row" style="gap:16px"><div id="rg${i}"></div><div><b style="font-size:1.35rem;letter-spacing:-.03em">${t[3]}</b><div class="small muted strong">${t[0]}</div><div class="xs text-green strong mt-1">Verified Â· shown on website</div></div></div>`).join('');
+  document.getElementById('impact-rings').innerHTML = targets.map((t,i)=>`<div class="row" style="gap:16px"><div id="rg${i}"></div><div><b style="font-size:1.35rem;letter-spacing:-.03em">${t[3]}</b><div class="small muted strong">${t[0]}</div><div class="xs text-green strong mt-1">Verified · shown on website</div></div></div>`).join('');
   targets.forEach((t,i)=>Charts.ring('#rg'+i, Math.round(t[1]/t[2]*100), t[4], '100%'));
 
   Charts.bar('#ch-traffic', { height: 280, labels: D.traffic30.map((_,i)=>i<20?'Sep '+(i+11):'Oct '+(i-19)), stacked: false,
     series: [{ name: 'Visitors', data: D.traffic30, color: C.green }, { name: 'Page views', data: D.pageviews30, color: '#cfe6d2' }] });
 
-  document.getElementById('camp-list').innerHTML = D.campaigns.filter(c=>c.status==='Live'||c.status==='Completed').slice(0,3).map(c=>{ const p=Math.round(c.raised/c.goal*100); return `<div class="mb-2"><div class="row between small strong"><span>${c.title}</span><span class="text-green">${p}%</span></div><div class="progress mt-1"><i style="width:${p}%"></i></div><div class="xs muted mt-1">${UI.ugxShort(c.raised)} of ${UI.ugxShort(c.goal)} Â· ${c.donors} donors</div></div>`; }).join('');
+  document.getElementById('camp-list').innerHTML = D.campaigns.filter(c=>c.status==='Live'||c.status==='Completed').slice(0,3).map(c=>{ const p=Math.round(c.raised/c.goal*100); return `<div class="mb-2"><div class="row between small strong"><span>${c.title}</span><span class="text-green">${p}%</span></div><div class="progress mt-1"><i style="width:${p}%"></i></div><div class="xs muted mt-1">${UI.ugxShort(c.raised)} of ${UI.ugxShort(c.goal)} · ${c.donors} donors</div></div>`; }).join('');
 
   document.getElementById('don-body').innerHTML = D.donations.slice(0,6).map(d=>`<tr><td><div class="cell-user">${UI.avatar(d.donor==='Anonymous'?'A N':d.donor)}<div><b>${d.donor}</b><span>${d.id}</span></div></div></td><td>${d.purpose}</td><td class="muted">${UI.date(d.date)}</td><td class="num">${UI.ugx(d.amount)}</td><td>${UI.pill(d.status)}</td></tr>`).join('');
 
-  document.getElementById('feed').innerHTML = D.activity.slice(0,6).map(a=>`<div class="feed-item"><span class="feed-dot ${a.tone}">${UI.icon(a.ic)}</span><div class="grow"><b>${a.t}</b><span>${a.s} Â· ${a.when}</span></div></div>`).join('');
+  document.getElementById('feed').innerHTML = D.activity.slice(0,6).map(a=>`<div class="feed-item"><span class="feed-dot ${a.tone}">${UI.icon(a.ic)}</span><div class="grow"><b>${a.t}</b><span>${a.s} · ${a.when}</span></div></div>`).join('');
   Charts.ring('#ring-health', 68, C.green);
 });</script>
 

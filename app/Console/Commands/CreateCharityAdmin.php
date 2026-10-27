@@ -20,9 +20,9 @@ class CreateCharityAdmin extends Command
             $this->error('A name and valid email address are required.');
             return self::FAILURE;
         }
-        $password = (string) $this->secret('Password (minimum 12 characters)');
-        if (strlen($password) < 12) {
-            $this->error('Use a password with at least 12 characters.');
+        $password = (string) $this->secret('Password (minimum 4 characters)');
+        if (strlen($password) < 4) {
+            $this->error('Use a password with at least 4 characters.');
             return self::FAILURE;
         }
         $now = now();

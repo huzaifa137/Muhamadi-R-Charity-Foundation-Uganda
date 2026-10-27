@@ -38,11 +38,11 @@ class SitePageContentManagementTest extends TestCase
 
     public function test_page_editor_requires_an_active_content_authorised_admin(): void
     {
-        $this->get(route('admin.site-pages.index'))->assertForbidden();
+        $this->get(route('admin.site-pages.index'))->assertRedirect(route('admin.login'));
         $finance = $this->admin('finance_manager');
         $this->withSession(['charity_admin_id' => $finance])->get(route('admin.site-pages.edit', 'home'))->assertForbidden();
         $inactive = $this->admin('administrator', false);
-        $this->withSession(['charity_admin_id' => $inactive])->get(route('admin.site-pages.index'))->assertForbidden();
+        $this->withSession(['charity_admin_id' => $inactive])->get(route('admin.site-pages.index'))->assertRedirect(route('admin.login'));
     }
 
     public function test_content_manager_can_edit_a_page_and_save_section_items_with_audit_log(): void
@@ -50,7 +50,13 @@ class SitePageContentManagementTest extends TestCase
         $admin = $this->admin();
         $this->withSession(['charity_admin_id' => $admin])
             ->get(route('admin.site-pages.edit', 'home'))
-            ->assertOk()->assertSee('Edit Home page')->assertSee('Section information');
+            ->assertOk()
+            ->assertSee('Edit Home page')
+            ->assertSee('spe-hero', false)
+            ->assertSee('spe-overview', false)
+            ->assertSee('spe-layout', false)
+            ->assertSee('Publishing checklist')
+            ->assertSee('Section information');
 
         $page = SitePageContent::where('page_key', 'home')->firstOrFail();
         $sections = $page->sections;
